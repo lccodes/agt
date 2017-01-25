@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+<div class="container">
+    <div class="row">
+        <div class="box">
+            <div class="col-lg-12">
+                <h2 class="text-center">Homeworks</h2>
+            </div>
+        </div>
+
+
+        {% for post in site.posts reversed %}
+            {% if post.label == 'homework' and post.date <= site.time %}
+                <div class="box">
+                    <div class="col-lg-12">
+                        <hr>
+                        <h2 class="intro-text text-center"><a href="{{ post.url | prepend: site.url }}">{{ post.title }}</a></h2>
+                        <hr>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="box">
+            <div class="col-lg-12">
+                <hr>
+                <h2 class="intro-text text-center"><a href="//cs.brown.edu/courses/cs1951k/homework">Homework 1: Coming Soon</a></h2>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>

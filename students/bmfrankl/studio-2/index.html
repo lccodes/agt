@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/course/cs100/pub/bootstrap/bootstrap.min.css" type="text/css" />
+</head>
+<body>
+<h1 id="brian-franklin-studio-2-assignment">Brian Franklin Studio 2 Assignment</h1>
+<h1 id="median">Median:</h1>
+<blockquote>
+<p>Mean years of schooling</p>
+</blockquote>
+<blockquote>
+<p>8.5 years</p>
+</blockquote>
+<h1 id="mean">Mean:</h1>
+<blockquote>
+<p>Internet users (per 100 people)</p>
+</blockquote>
+<blockquote>
+<p>93.17 users</p>
+</blockquote>
+<h1 id="quartile">Quartile:</h1>
+<blockquote>
+<p>Third quartile of Gross National Income</p>
+</blockquote>
+<blockquote>
+<p>$22800.5</p>
+</blockquote>
+<h1 id="filter">Filter:</h1>
+<blockquote>
+<p>I selected column I “Region” and followed the path Data &gt; Filter &gt; Autofilter, then clicked the drop down arrow, then unchecked every region except for Europe to get a filtered data set only showing the values for countries in Europe.</p>
+</blockquote>
+<h1 id="sorting">Sorting:</h1>
+<blockquote>
+<p>I went to Data &gt; Sort and changed the category in the first drop down arrow to Life expectancy at birth. Then I changed the ordering from ascending to descending, and clicked OK. This gave me the same data file, arranged in vertical order from highest life expectancy at the top to lowest life expectancy at the bottom of the spreadsheet. The rest of the values were likewise kept with their respective countries.</p>
+</blockquote>
+<h1 id="pivot-table">Pivot Table:</h1>
+<p>I selected the entire table, then clicked on Data &gt; PivotTable.<br />Next, I dragged “Country” into Row Fields, and “Gross National Income” &amp; “Mean years of schooling” into Data Fields. I then double clicked on both of these data field inputs and changed the calculation from sum to mean.</p>
+<p>Then I clicked OK.</p>
+<p>The average GNI was 17014.8085106383 and the average of the mean years of schooling was 8.110106383</p>
+<h1 id="vlookup">VLOOKUP:</h1>
+<blockquote>
+<p>I went to column I in the combined data sheet and used VLOOKUP to bring out the HDI index of each country. I used the following formula:</p>
+</blockquote>
+<blockquote>
+<p>=IFERROR(VLOOKUP(<span class="math"><em>A</em>2, </span>A<span class="math">1 : </span>C$188, COLUMN(B1), 0),“”)</p>
+</blockquote>
+<blockquote>
+<p>This provided the HDI’s and made any N/A cells blank to clean the data.</p>
+</blockquote>
+<p>y-values: D2 to D189</p>
+<p>x-values: A2 to A189</p>
+<h1 id="bar-charts">Bar Charts:</h1>
+<blockquote>
+<p>I clicked on the bar chart icon and clicked on column chart, then I entered the following data ranges:</p>
+</blockquote>
+<blockquote>
+<p><span class="math"><em>S</em><em>h</em><em>e</em><em>e</em><em>t</em>1.</span>A<span class="math">1 : </span>A<span class="math">189, </span>Sheet1.$D<span class="math">1 : </span>D$189</p>
+</blockquote>
+<blockquote>
+<p>This provided a bar chart for the mean life expectancy at birth for all of the countries in the spreadsheet.<br />Generally, it seems like some European countries (such as Norway) have very high life expectancies, while on the lower end of the spectrum you find many African nations, including the South Sudan.</p>
+</blockquote>
+<div class="figure">
+<img src="Life%20Expectancy%20Bar.png" alt="Life Expectancy at Birth" /><p class="caption">Life Expectancy at Birth</p>
+</div>
+<h1 id="scatter-plot">Scatter Plot:</h1>
+<p>I plotted gross national income vs. Life expectancy at birth. It seems that once the gross national income rises above $30,000 you se drastic increases in life expectancy overall.</p>
+<p>My data ranges were: <span class="math"><em>S</em><em>h</em><em>e</em><em>e</em><em>t</em>1.</span>D<span class="math">1 : </span>D<span class="math">189, </span>Sheet1.$G<span class="math">1 : </span>G$189</p>
+<div class="figure">
+<img src="Life%20Expectancy%20Scatter.png" alt="Gross National Income vs. Life Expectancy at Birth" /><p class="caption">Gross National Income vs. Life Expectancy at Birth</p>
+</div>
+</body>
+</html>

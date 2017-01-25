@@ -1,0 +1,1712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CS100: Data Fluency for All</title>
+    <description>CS100: Data Fluency is a Brown CS course designed to teach students the basics of data science and the many things it can do.
+</description>
+    <link>//cs.brown.edu/courses/cs100/</link>
+    <atom:link href="//cs.brown.edu/courses/cs100/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 11 Jan 2017 19:59:17 -0500</pubDate>
+    <lastBuildDate>Wed, 11 Jan 2017 19:59:17 -0500</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Homework 3</title>
+        <description>&lt;h1 id=&quot;cs100-homework-3&quot;&gt;CS100 Homework #3&lt;/h1&gt;
+
+&lt;h3 id=&quot;supervised-learning&quot;&gt;Supervised Learning&lt;/h3&gt;
+
+&lt;h4 id=&quot;linear-regression-and-classification&quot;&gt;Linear Regression and Classification&lt;/h4&gt;
+
+&lt;h5 id=&quot;due-november-10-2016-at-10-pm&quot;&gt;Due: November 10, 2016, at 10 pm&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions&lt;/h3&gt;
+&lt;p&gt;Please submit your solutions to Canvas, as an R markdown (.Rmd) file. Please also run Knit HTML on your R markdown file, and submit the resulting .HTML file as well.&lt;/p&gt;
+
+&lt;p&gt;Be sure to follow the CS100 course collaboration policy as you work on this and all CS100 assignments.&lt;/p&gt;
+
+&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
+&lt;p&gt;The topic of this homework assignment is supervised learning. The first half is concerned with linear regression, and the second half, classification.&lt;/p&gt;
+
+&lt;h3 id=&quot;part-i-linear-regression&quot;&gt;Part I: Linear Regression&lt;/h3&gt;
+&lt;p&gt;Linear regression is a tool for predicting a quantitative response based on one or more explanatory variables, or predictors. There are two types of linear regression: simple and multiple.&lt;/p&gt;
+
+&lt;p&gt;Simple linear regression is a method for predicting a quantitative response \(Y\) on the basis of a single predictor \(X\). The model assumes that there is a linear relationship between and \(X\) and \(Y\). We write this linear relationship as&lt;/p&gt;
+
+&lt;p&gt;\[Y = \beta_0 + \beta_1 X\]&lt;/p&gt;
+
+&lt;p&gt;Here \(\beta_0\) and \(\beta_1\) are the two coefficients of the linear model, representing the intercept and slope, respectively. Specifically, \(\beta_1\) describes how \(Y\) changes in response to changes in \(X\).&lt;/p&gt;
+
+&lt;p&gt;Multiple linear regression is an extension of simple linear regression that handles multiple explanatory variables. In general, if there are \(n\) distinct predictors, then multiple linear regression takes the form&lt;/p&gt;
+
+&lt;p&gt;\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + … + \beta_n X_n\]&lt;/p&gt;
+
+&lt;p&gt;Here \(\beta_i\), for \(i \in { 0, \ldots, n }\) are the coefficients of the linear model, representing the gradients (i.e., slopes) in each direction, respectively. Specifically, \(\beta_i\) describes how \(Y\) changes in response to changes in \(X_i\).&lt;/p&gt;
+
+&lt;h3 id=&quot;data&quot;&gt;Data&lt;/h3&gt;
+&lt;p&gt;To get started, load the data into R. Type the following commands:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;library(MASS)
+install.packages(&quot;ISLR&quot;)
+library(ISLR)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Both these libraries contain a large collection of data sets. In this assignment, you will be using the Boston data set from the MASS library and the Carseat data set from the ISLR library. To see a short description of these data sets, type:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;?Carseats
+?Boston
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;problems&quot;&gt;Problems&lt;/h3&gt;
+
+&lt;h4 id=&quot;this-question-should-be-answered-using-the-boston-data-set-before-you-begin-spend-some-time-investigating-the-data-set-use-names-str-head-summary-etc&quot;&gt;1) This question should be answered using the Boston data set. Before you begin, spend some time investigating the data set. Use &lt;code class=&quot;highlighter-rouge&quot;&gt;names&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;str&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;head&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;summary&lt;/code&gt;, etc.&lt;/h4&gt;
+
+&lt;p&gt;1.1) We are interested in building a linear model to predict median housing prices. Which explanatory variables seem like they might be predictive of this response? Use the &lt;code class=&quot;highlighter-rouge&quot;&gt;pairs&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;cor&lt;/code&gt; functions to determine your answer.&lt;/p&gt;
+
+&lt;p&gt;1.2) Perform a simple linear regression with &lt;code class=&quot;highlighter-rouge&quot;&gt;medv&lt;/code&gt; (median house value) as the response and &lt;code class=&quot;highlighter-rouge&quot;&gt;lstat&lt;/code&gt; (percent of households with low socioeconomic status) as the predictor. Run the &lt;code class=&quot;highlighter-rouge&quot;&gt;summary&lt;/code&gt; function on your model, and comment on the output.&lt;/p&gt;
+
+&lt;p&gt;1.3) Generate a scatter plot of &lt;code class=&quot;highlighter-rouge&quot;&gt;mdev&lt;/code&gt; versus &lt;code class=&quot;highlighter-rouge&quot;&gt;lstat&lt;/code&gt; along with its linear regression line.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Hint:&lt;/em&gt; Use the function &lt;code class=&quot;highlighter-rouge&quot;&gt;abline&lt;/code&gt;, which takes as input an intercept and a slope: e.g., &lt;code class=&quot;highlighter-rouge&quot;&gt;abline(a = 0, b = 0)&lt;/code&gt; plots the x-axis. When applied to a linear model, &lt;code class=&quot;highlighter-rouge&quot;&gt;abline&lt;/code&gt; plots the corresponding linear regression line.&lt;/p&gt;
+
+&lt;p&gt;1.4) Make a residual plot of residuals versus fitted values for the regression of &lt;code class=&quot;highlighter-rouge&quot;&gt;medv&lt;/code&gt; on &lt;code class=&quot;highlighter-rouge&quot;&gt;lstat&lt;/code&gt;. What do you observe? What does this tell us about our model?&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Hint&lt;/em&gt;: Use the functions &lt;code class=&quot;highlighter-rouge&quot;&gt;residuals()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;predict()&lt;/code&gt; to access the residuals and fitted values of your linear model.&lt;/p&gt;
+
+&lt;p&gt;1.5) Repeat the previous three questions using various log transformations of the data: e.g., transform one or both variables. Does transforming the data lead to a better linear fit? Use both supporting statistics and plots to justify your answer.&lt;/p&gt;
+
+&lt;p&gt;####2) This question should be answered using the Carseats data set. Before you begin, spend some time investigating the data set. Use &lt;code class=&quot;highlighter-rouge&quot;&gt;names&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;str&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;head&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;summary&lt;/code&gt;, etc.&lt;/p&gt;
+
+&lt;p&gt;2.1) We are interested in building a linear model that predicts Sales. As above, we would like to use &lt;code class=&quot;highlighter-rouge&quot;&gt;pairs&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;cor&lt;/code&gt; functions to determine which explanatory variables seem like they might be predictive of this response. But this data set includes non-numeric variables. So before calling these functions, create a new data frame as follows, extracting only the numeric variables from the Carseats data set:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;install.packages(“purrr”)
+library(purrr)
+numerics_only &amp;lt;- Carseats %&amp;gt;% keep(is.numeric)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now, which of these numeric variables seem most likely to be predictive of Sales? Can you back up the answers given by &lt;code class=&quot;highlighter-rouge&quot;&gt;pairs&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;cor&lt;/code&gt; with intuitive explanations?&lt;/p&gt;
+
+&lt;p&gt;2.2) Choose two variables which seem likely to be predictive of Sales. As above, make a scatter plot of each variable versus Sales, fit a simple linear regression model for each variable, superimpose the regression line on your scatter plot, and finally make a residual plot.&lt;/p&gt;
+
+&lt;p&gt;2.3) Now run a multiple regression using both variables simultaneously. The R syntax for building a linear model using two variables is &lt;code class=&quot;highlighter-rouge&quot;&gt;lm(z ~ x + y)&lt;/code&gt;, where &lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt; is your response variable, and &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; are the explanatory variables.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Hint&lt;/em&gt;: Use the &lt;code class=&quot;highlighter-rouge&quot;&gt;scatterplot3d&lt;/code&gt; package to plot all three variables, and follow this example to superimpose the regression &lt;em&gt;plane&lt;/em&gt; on your 3d scatter plot.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;install.packages(“scatterplot3d”)
+library(scatterplot3d)
+xyz &amp;lt;- scatterplot3d(z, x, y, main = “z vs. x and y”, xlab = &quot;x&quot;, ylab = &quot;y&quot;, zlab = “z”)
+xyz$plane3d(my_lm, col = &quot;red&quot;) # here, my_lm is your linear model!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;How does your multiple regression model compare to your single regression models?&lt;/p&gt;
+
+&lt;p&gt;2.4) Next, try adding the categorical variables ShelveLoc, US, and Urban to your multiple regression model. (It’s always a good idea to add one variable at a time.) Do any of these variables improve your model? Try to provide an intuitive explanation for the results.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Hint&lt;/em&gt;: R is very smart, so you really don’t have to do anything special to handle categorical variables properly. But you need to understand how R handles categorical variables to interpret the results!&lt;/p&gt;
+
+&lt;p&gt;2.5) Summarize the best linear model you discovered.&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 30 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/homework/homework-3/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/homework/homework-3/</guid>
+        
+        
+        <category>homework</category>
+        
+      </item>
+    
+      <item>
+        <title>Studio 6: Linear Regression</title>
+        <description>&lt;h1 id=&quot;cs100-studio-6&quot;&gt;CS100 Studio #6&lt;/h1&gt;
+
+&lt;h3 id=&quot;linear-regression&quot;&gt;Linear Regression&lt;/h3&gt;
+
+&lt;h5 id=&quot;week-of-october-24-2016&quot;&gt;Week of October 24, 2016&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;During today’s studio, you will create simple linear regression models using R. Please write all of your code and answers in an R Markdown document, which you will then convert to an HTML file.&lt;/p&gt;
+
+&lt;p&gt;Upon completion of all tasks, a TA will give you credit for today’s studio. If you do not manage to complete all the assigned work during the studio period, do not worry. You can continue to work on this assignment until midnight on the Tuesday following this studio. Come by TA hours any time before then to show us your completed work and get credit for today’s studio.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;objectives&quot;&gt;Objectives&lt;/h3&gt;
+&lt;p&gt;By the end of this studio, you will know:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;How to determine when data displays a linear relationship and a simple linear regression model is appropriate&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;How to create a simple linear regression model in R&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;How to interpret a simple linear regression model in R&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;linear-regression-1&quot;&gt;Linear Regression&lt;/h3&gt;
+&lt;p&gt;Linear regression is the most widely used tool for establishing a link between two (or more) variables. A linear regression represents the “line of best fit” between a response variable \(Y\) and one or more explanatory variables. In the case of just one explanatory variable \(X\), you can imagine a scatter plot of pairs of \(x_i\) and corresponding \(y_i\) values. Generalizing from the sample data in such a scatter plot, regression is used to infer how \(Y\) depends on \(X\) (and vice versa); unobserved values of \(X\) may then be used to predict the corresponding value of \(Y\). A linear regression is simply the &lt;em&gt;line&lt;/em&gt; that best predicts \(Y\), meaning the line that minimizes the error between the predicted and the actual values on the sample data.&lt;/p&gt;
+
+&lt;p&gt;To perform a linear regression in R, we will use the command &lt;code class=&quot;highlighter-rouge&quot;&gt;lm(y ~ x)&lt;/code&gt;. To understand the output of &lt;code class=&quot;highlighter-rouge&quot;&gt;lm()&lt;/code&gt; in R, we’ll go through an example.&lt;/p&gt;
+
+&lt;p&gt;Here’s a scatterplot of 250 Americans’ weights (pounds) and heights (inches), plus the line of best fit.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;//cs.brown.edu/courses/cs100/studios/img/6/heightweight_example.png&quot; alt=&quot;heightweight_scatter&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s fit a linear regression model and analyze the output.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hw_model &amp;lt;- lm(healthmeasures$Weight ~ healthmeasures$Height)
+summary(hw_model)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;//cs.brown.edu/courses/cs100/studios/img/6/heightweight_lm.png&quot; alt=&quot;heightweight_lm&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A linear model fits a line to the data of the form \(y = a + bx\), where \(a\) is the \(y\)-intercept and \(b\) is the slope. For this example, our model is &lt;strong&gt;Weight = -194.4861 + 5.2995(Height)&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here’s how we interpret a few of the metrics in our R output (highlighted in red):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The \(y\)-intercept of -194.4861 is the predicted Weight of a person whose Height is 0. Because no one is 0 inches tall, the \(y\)-intercept is meaningless in this case. (More generally, predictions are not usually valid outside the range of the \(x\) values observed in the data, and become more and more precise the closer the queried \(x\) value is to the sample mean \(\bar{x}\).)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The slope of 5.2995 indicates that for every one inch increase in Height, we can expect a 5.2995 pound increase in Weight.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The \(p\)-value for the \(y\)-intercept is less than \(1.67 \times 10^{-6}\) (i.e., nearly 0). Likewise, the \(p\)-value for the slope is less than \(2 \times 10^{-16}\) (i.e., essentially 0). When a \(p\)-value is less than 0.05, we usually conclude that the predictor is significant (i.e., including this predictor in the model yields better results than not). Indeed, in this example, we conclude that linear regression uncovered a statistically significant relationship between Height and Weight.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The \(R^2\) value is 0.2631. This indicates that 26.31% of the variation in individuals’ Weights can be explained by their Heights; the rest of the variation is not explained by our model. An \(R^2\) value can range from 0 to 1, and the closer it is to 1, the better a model fits the data. In our example, we might expect \(R^2\) to be low, because aside from Height, there are many other factors that could potentially affect a person’s Weight.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;data&quot;&gt;Data&lt;/h3&gt;
+&lt;p&gt;Now that we’ve reviewed (some of) R’s output for linear regression, you will start creating your own models! You’ll be working with four sets of data:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Randomly generated numbers&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/6/car_value.csv&quot;&gt;New and used car prices&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/6/worldpop.csv&quot;&gt;World population growth&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/6/USArrests.csv&quot;&gt;Violent Crime Rates&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;randomly-generated-data&quot;&gt;Randomly Generated Data&lt;/h3&gt;
+&lt;p&gt;Let us begin by randomly generating some data. Using the&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;runif(n, min, max)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;command, we can generate a vector of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; random numbers uniformly distributed between &lt;code class=&quot;highlighter-rouge&quot;&gt;min&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;max&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Using &lt;code class=&quot;highlighter-rouge&quot;&gt;runif()&lt;/code&gt;, generate two vectors, &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt;, where each has 50 numbers ranging between 0 and 100.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a scatterplot of x and y using the command &lt;code class=&quot;highlighter-rouge&quot;&gt;plot(x, y)&lt;/code&gt;. Do you see any patterns?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Report the correlation between x and y using &lt;code class=&quot;highlighter-rouge&quot;&gt;cor(x, y)&lt;/code&gt;. Is there a strong correlation between the two variables?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Regardless of your answers to #1 and #2, run a linear regression using &lt;code class=&quot;highlighter-rouge&quot;&gt;my_model &amp;lt;- lm(y ~ x)&lt;/code&gt;. Add a line of best fit to your scatterplot using &lt;code class=&quot;highlighter-rouge&quot;&gt;abline(my_model)&lt;/code&gt;. Display the output of your model using &lt;code class=&quot;highlighter-rouge&quot;&gt;summary(my_model)&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;What is the slope of your model? Is it significant? Explain why or why not. (Hint: Check the \(p\)-value.) Look at the \(R^2\) value. What does it tell you about how well your model explains the data?&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Repeat this question using &lt;code class=&quot;highlighter-rouge&quot;&gt;n = 1000&lt;/code&gt;. Do your results differ? Explain.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cars-data&quot;&gt;Cars Data&lt;/h3&gt;
+&lt;p&gt;Read in the data using &lt;code class=&quot;highlighter-rouge&quot;&gt;cars &amp;lt;- read.csv(&quot;car_value.csv&quot;, stringsAsFactors = FALSE)&lt;/code&gt;, and take a look at the data frame (it is very small). The “make” of a car is the brand (e.g., Ford) and the “model” is the name of that car (e.g., Mustang). The “new” column represents the price that the car sold for when it was brand new, the “fiveyear” column represents the price the car sold for after five years, and the “twentyfive” column represents the price  the car sold for after twenty-five years.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Summarize the data using &lt;code class=&quot;highlighter-rouge&quot;&gt;summary(cars)&lt;/code&gt;. What general trends can you identify? (Hint: Take a look at the extreme values: i.e., the minima and the maxima.)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a scatter plot of “new” and “fiveyear” prices. Is there any correlation between the two variables? If so, is it positive or negative?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run a linear regression on the data with “new” as the independent variable and “fiveyear” as the dependent variable. What is the regression line of your model, in the form \(y = a + bx\)? Add a line-of-best-fit to your scatter plot.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Is there a significant relationship between “new” and “fiveyear” prices?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;What percent of variation in cars’ “fiveyear” prices is explained by their “new” prices?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Predict how a new car that sells for $30,000 will sell for five years later.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Can you predict how much a new car that sells for $150,000 will sell for five years later?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a scatter plot and run a linear regression model with “new” as the independent variable and “twentyfive” as the dependent variable. How does the fit of this model compare to the previous model?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This data set contains a few outlying points that greatly skew the slope of line upwards. Do you notice anything about these data points? They are luxury cars, whose values increase over time. Let’s redo our analysis, for non-luxury cars only.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Filter the &lt;code class=&quot;highlighter-rouge&quot;&gt;cars&lt;/code&gt; data frame so that it only includes non-luxury cars. Then, using the non-luxury data frame, create a scatter plot of “new” and “twentyfive” prices. Do you observe any correlation?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Lastly, run a regression on the data frame for non-luxury cars, once again using “new” as the independent variable and “twentyfive” as the dependent variable. Is the model (i.e., its intercept or its slope) significant? What does this say about the relationship about new and twenty-five year prices of these non-luxury cars?&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;world-population-growth&quot;&gt;World Population Growth&lt;/h3&gt;
+
+&lt;p&gt;Next, we’ll look at worldpop.csv, which lists the total world population from 1500-2015. Load the data into R in the usual way.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a scatter plot with Year on the x-axis and Population on the y-axis. What kind of trend do you observe?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run a linear regression, modeling Prediction as a function of Year. Is the output of your model as expected?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;abline()&lt;/code&gt; to add the line of best fit to your scatter plot. How well does the line fit the data?&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Even though Year is a significant predictor of Population, the relationship between the two variables are not linear. You’ll notice that the Population exhibits exponential growth (i.e., it curves upward over time). Thus, you should have seen that the line of best fit does not accurately follow the data’s progression. Linear regression is not appropriate for modeling these data.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;violent-crime-rates&quot;&gt;Violent Crime Rates&lt;/h3&gt;
+
+&lt;p&gt;Finally, we have a data set which reports crime rates per 100,000 residents by state. This data set can be loaded using &lt;code class=&quot;highlighter-rouge&quot;&gt;crimes &amp;lt;- read.csv(&quot;USArrests.csv&quot;, row.names = 1)&lt;/code&gt;. The final argument, &lt;code class=&quot;highlighter-rouge&quot;&gt;row.names = 1&lt;/code&gt;, tells R to label the rows with the names found in the first column of the file.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run the &lt;code class=&quot;highlighter-rouge&quot;&gt;pairs&lt;/code&gt; command on this data set, using &lt;code class=&quot;highlighter-rouge&quot;&gt;pairs(crimes)&lt;/code&gt;. This command will create a scatter plot matrix, which consists of scatter plots for each pair of variables in the data set.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Now run the command &lt;code class=&quot;highlighter-rouge&quot;&gt;cor(crimes)&lt;/code&gt;, which will compute a correlation matrix, consisting of correlation coefficients for each pair of variables in the data set.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;What do you notice about these two matrices? Comment on Murder vs. Assault; UrbanPop vs. Rape; and Murder vs. Rape.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;When you are finished with this studio, call over a TA to check your answers and give you credit for the studio.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 26 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/studios/studio-6/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/studios/studio-6/</guid>
+        
+        
+        <category>studios</category>
+        
+      </item>
+    
+      <item>
+        <title>Studio 5: Confidence Intervals and Sampling</title>
+        <description>&lt;h1 id=&quot;cs100-studio-5&quot;&gt;CS100 Studio #5&lt;/h1&gt;
+
+&lt;h3 id=&quot;confidence-intervals-and-sampling&quot;&gt;Confidence Intervals and Sampling&lt;/h3&gt;
+
+&lt;h5 id=&quot;week-of-october-17-2016&quot;&gt;Week of October 17, 2016&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;During today’s studio, you will be sampling from binomial and normal distributions, and learning about confidence intervals. Also, you will be learning more advanced programming concepts in R.&lt;/p&gt;
+
+&lt;p&gt;Upon completion of all tasks, a TA will give you credit for today’s studio. If you do not manage to complete all the assigned work during the studio period, do not worry. You can continue to work on this assignment until midnight on the Tuesday following this studio. Come by TA hours any time before then to show us your completed work and get credit for today’s studio.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;objectives&quot;&gt;Objectives&lt;/h3&gt;
+&lt;p&gt;By the end of this studio, you will apply the following concepts in R:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loops&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Functions&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Confidence intervals&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;for-loops&quot;&gt;For loops&lt;/h3&gt;
+
+&lt;p&gt;Often in programming, you will find yourself wanting to perform a sequence operation more than once.  Iterating over blocks of code, rather than repeating yourself, is not only convenient, it helps prevent bugs. A &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop is a handy iterator. Below is an example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;for (i in 1:10) {
+    print(&quot;Hello&quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop will print “Hello” 10 times. The way it works is: the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; changes value each time the loop is entered. The first time its value is 1, next it is 2, then 3, and so on, all the way up to 10, since the range of values specified is &lt;code class=&quot;highlighter-rouge&quot;&gt;1:10&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Since &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; is a variable, the code inside a &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop can refer to &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;, and take advantage of the fact that its value is updated with each iteration. Here is another example, in which the numbers 10 through 20 (inclusive), are printed out:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;for (i in 10:20) {
+    print(i)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Also, the reverse can be performed also, where 20 through 10 are printed out instead:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;for (i in 20:10) {
+    print(i)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Programming tip&lt;/strong&gt;: Pick special variable names (&lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; is a popular one, and so is &lt;code class=&quot;highlighter-rouge&quot;&gt;j&lt;/code&gt;) to use as counters in your loops, and &lt;em&gt;do not use these variables elsewhere in your programs&lt;/em&gt;. That way, it will be easy to keep track of your counter’s values, and you won’t get confused by their values changing unexpectedly.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;functions&quot;&gt;Functions&lt;/h3&gt;
+&lt;p&gt;We’ve talked a lot about using built-in functions, but a major part of programming is writing your own functions! The most readable code usually consists of lots of small functions pieced together into one large program.&lt;/p&gt;
+
+&lt;p&gt;For starters, a function needs a name! And then, it needs a body. A function body in R is the code enclosed within curly brackets {}.&lt;/p&gt;
+
+&lt;p&gt;Most functions take as input at least argument, although this is not required. And then, a function usually returns something to its caller, although it doesn’t have to. (Programming languages are very flexible!)&lt;/p&gt;
+
+&lt;p&gt;The most important idea behind functions is that objects created within a function are local to the function, meaning they cease to exist outside the function. But you can still return the value of an object that is created within a function to the environment from which the function was called.&lt;/p&gt;
+
+&lt;p&gt;This is what a typical function looks like:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name.of.function &amp;lt;- function(argument1, argument2) {
+    statements
+    something_to_return
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In R, the value that is calculated on the last line of a function is automatically returned to the function’s caller (regardless of whether or not the caller might have any use for that value).&lt;/p&gt;
+
+&lt;p&gt;Here’s an example of an extremely simple function that adds one to the argument, which is presumably a number:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;add.one &amp;lt;- function(num) {
+    added_one &amp;lt;- num + 1
+    added_one
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;As you can see, this function creates an object, &lt;code class=&quot;highlighter-rouge&quot;&gt;added_one&lt;/code&gt;, which is then returned to the function’s caller in the last line of the function.&lt;/p&gt;
+
+&lt;p&gt;For example, if we run &lt;code class=&quot;highlighter-rouge&quot;&gt;add.one(5)&lt;/code&gt;, then the value 6 will be returned.&lt;/p&gt;
+
+&lt;p&gt;Here’s another example of a function. This one takes as input two arguments, and returns their sum:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;add.two.num &amp;lt;- function(x, y = 1) {
+    x + y
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;add.two.num(1, 2)&lt;/code&gt; evaluates to 3. Also, notice how &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; is defined. The &lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt; assigns a default value to &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt;, in case no other value is provided. So we could call &lt;code class=&quot;highlighter-rouge&quot;&gt;add.two.num(3)&lt;/code&gt;, and this would evaluate to 4, adding 3 and 1 together.&lt;/p&gt;
+
+&lt;p&gt;Now you try.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Write a function that takes as input 3 numbers and returns their product. Test this function by returning the product of 10, 11, and 12.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;More details on functions can be found &lt;a href=&quot;http://adv-r.had.co.nz/Functions.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;sat-scores&quot;&gt;SAT scores&lt;/h3&gt;
+
+&lt;p&gt;CollegeBoard released a &lt;a href=&quot;https://secure-media.collegeboard.org/digitalServices/pdf/sat/total-group-2015.pdf&quot;&gt;report&lt;/a&gt; on the SAT scores of all test takers in 2015. They reported that for the population of all 1,698,521 test takers, these were the results:&lt;/p&gt;
+
+&lt;p&gt;Critical Reading: mean 495 and standard deviation 116&lt;/p&gt;
+
+&lt;p&gt;Math: mean 511 and standard deviation 120&lt;/p&gt;
+
+&lt;p&gt;Writing: mean 484 and standard deviation 115&lt;/p&gt;
+
+&lt;p&gt;We will assume that these scores are normally distributed (with the given means and standard deviations).&lt;/p&gt;
+
+&lt;p&gt;Because CollegeBoard administered and graded all of the exams, only they were able to compute the mean and standard deviation for the entire population. So let’s imagine a situation in which we’re independent researchers who want to estimate these scores ourselves.&lt;/p&gt;
+
+&lt;p&gt;We don’t have access to all the students’ results, and it’s not possible for us to survey all 1,698,521 students to ask for their scores. What we can do, though, is ask a small sample of test takers for their scores. We won’t actually do that though, either; we’ll just ask R to simulate the results of collecting these data.&lt;/p&gt;
+
+&lt;p&gt;Because the SAT scores are normally distributed, to create a sample, we can use the R function &lt;code class=&quot;highlighter-rouge&quot;&gt;rnorm&lt;/code&gt;, which by default is defined as:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rnorm(n, mean = 0, sd = 1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;where &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is the number of observations you want (i.e., the number of draws from the distribution), &lt;code class=&quot;highlighter-rouge&quot;&gt;mean&lt;/code&gt; is the mean, and &lt;code class=&quot;highlighter-rouge&quot;&gt;sd&lt;/code&gt; is the standard deviation of the distribution you want to sample from. By default, the mean is set as 0 and the sd as 1, but we will change these values to reflect the mean and standard deviation of the populations’ scores.&lt;/p&gt;
+
+&lt;p&gt;For example, if we asked twenty students for their SAT Writing score, we could simulate this using &lt;code class=&quot;highlighter-rouge&quot;&gt;rnorm(20, mean = 484, sd = 115)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Simulate a survey that asks 20 students for their Critical Reading score. Calculate the sample mean and sample standard deviation of your simulated survey.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Next, we want to create a Confidence Interval based on our sample survey. This is the formula for calculating a 95% Confidence Interval: \( \mu \pm 1.96* \frac{\sigma}{\sqrt{n}} \). Convert this formula above into a function in R. Your function should take as input the following arguments: sample mean, sample standard deviation, and n (sample size).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Now calculate the 95% Confidence Interval for your sample of 20 students. Is the true mean (495) in this interval?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run your code again. Is the true mean in the interval this time?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Write an R predicate to test whether the true mean lies in the confidence interval.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Now, to be sure you understand the meaning of a 95% Confidence Interval, we are going to repeat the above steps 100 times. What should happen is: 95% of the time, the true mean should fall within the confidence interval. Here’s how to do this:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;First create a vector of 100 logicals using:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;my_logical &amp;lt;- logical(100)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next, write the skeleton of a &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;for (i in 1 : 100) {
+# your code here
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now, inside this &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop, do exactly what you did above. That is, simulate a sample survey; calculate the sample mean and the sample standard deviation; call your confidence interval function; and finally test whether the true mean lies within the confidence interval. As the last step in your loop, store the results of each test in your logical vector.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Hint&lt;/em&gt;: Try something like&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;my_logical[i] &amp;lt;- # test whether true mean lies within the confidence interval
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lastly, to summarize the results of these 100 experiments, sum your logical vector. (Remember that the logicals &lt;code class=&quot;highlighter-rouge&quot;&gt;TRUE&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;FALSE&lt;/code&gt; are represented as 1 and 0, respectively, in R, so logical vectors can be summed!)&lt;/p&gt;
+
+&lt;p&gt;Make sure your call to &lt;code class=&quot;highlighter-rouge&quot;&gt;sum&lt;/code&gt; is &lt;em&gt;outside your loop&lt;/em&gt;. This final sum represents the number of times in your 100 experiments that the true mean fell within the confidence interval. Is the value about 95?&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;What happens if instead of asking 20 students, you ask 200 students about their Critical Reading score. Use &lt;code class=&quot;highlighter-rouge&quot;&gt;rnorm&lt;/code&gt; to simulate the results of this sample. Then calculate the 95% Confidence Interval for this sample of 200 students. How does the range of this Confidence Interval differ from the one you generated in #3?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;polls&quot;&gt;Polls&lt;/h3&gt;
+
+&lt;p&gt;As you have probably heard, the 2016 elections are right around the corner. To get a sense of the outcome, many people rely on polls conducted on a subset of the nation’s population. So an obvious question is: how well do the results from a small sample generalize to the entire population? We will investigate how to answer this question, looking a poll conducted recently.&lt;/p&gt;
+
+&lt;p&gt;From 10/10 - 10/13, the Washington Post conducted a poll (found &lt;a href=&quot;https://www.washingtonpost.com/page/2010-2019/WashingtonPost/2016/10/16/National-Politics/Polling/question_17564.xml&quot;&gt;here&lt;/a&gt;) and determined that among 740 likely voters, 50% will vote for Clinton and 46% will vote for Trump. To quantify how close the poll results can be expected to mirror the opinions of the population as a whole, the Washington Post also reported the poll’s margin of error (MoE): 4 points. This means that for the population, the expected votes for Clinton should be in the range 46% - 54%, while the expected votes for Trump should be in the range 42% - 50%. For this exercise, we want to verify that the Washington Post used a 95% confidence interval to calculate the MoE. (Polling agencies don’t generally report their confidence levels, only their margins of error.)&lt;/p&gt;
+
+&lt;p&gt;If we assume that Clinton and Trump are the only candidates (we apologize for ignoring the other candidates), we can use a binomial distribution to model the votes. By the central limit theorem, the estimates 0.5 and 0.46 are normally distributed, with standard error \( \sqrt{\frac{\hat{p}*(1-\hat{p})}{n}} \), where \( \hat{p} \) is the probability of success (0.5 and 0.46 for Clinton and Trump respectively). Then the 95% confidence interval is computed as \( \mu \pm 1.96* \sqrt{\frac{\hat{p}*(1-\hat{p})}{n}} \). (For the 90%, just substitute 1.645 for 1.96.)&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Write a function to determine the 95% confidence interval for a proportion (using the formula shown above). Then use your function to report a confidence interval that estimates the proportion of Clinton voters and a confidence interval that estimates the proportion of Trump voters. Do the confidence intervals overlap? If so, we cannot conclude (at the 95% confidence level) that one candidate is preferred to another by the entire population.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Do the same for a 90% confidence interval. Is your conclusion any different? (For the 90%, just substitute 1.645 for 1.96.)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;When you are finished with this studio, call over a TA to check your answers and give you credit for the studio.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 19 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/studios/studio-5/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/studios/studio-5/</guid>
+        
+        
+        <category>studios</category>
+        
+      </item>
+    
+      <item>
+        <title>Homework 2</title>
+        <description>&lt;h1 id=&quot;cs100-homework-2&quot;&gt;CS100 Homework #2&lt;/h1&gt;
+
+&lt;h3 id=&quot;understanding-america&quot;&gt;Understanding America&lt;/h3&gt;
+
+&lt;h5 id=&quot;due-october-25-2016-at-10-pm&quot;&gt;Due: October 25, 2016, at 10 pm&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;Please submit your solutions to Canvas, as an R markdown (.Rmd) file. Please also run &lt;code class=&quot;highlighter-rouge&quot;&gt;Knit HTML&lt;/code&gt; on your R markdown file, and submit the resulting .HTML file as well.&lt;/p&gt;
+
+&lt;p&gt;Be sure to follow the CS100 course collaboration policy as you work on this and all CS100 assignments.&lt;/p&gt;
+
+&lt;h3 id=&quot;overview&quot;&gt;Overview:&lt;/h3&gt;
+&lt;p&gt;In this assignment, we will analyze election polling data from the USC Dornsife Understanding America study using our newly acquired skills of probability and statistics. The Understanding America study is a panel survey. This means it tracks the same subset of individuals over a long period time, recording their responses to the same set of survey questions. When each individual is surveyed, they fill out this form.&lt;/p&gt;
+
+&lt;p&gt;In the context of the 2016 presidential election, the Understanding America study asks participants for the probability that they will vote in the election, the probability they will vote for Donald Trump, and the probability they will vote for Hillary Clinton. In addition, it collects demographic information about its respondents. We will analyze this dataset, both descriptively and inferentially, to tell a story about the current presidential election.&lt;/p&gt;
+
+&lt;h3 id=&quot;data&quot;&gt;Data:&lt;/h3&gt;
+&lt;p&gt;Before we can release to you the data for this assignment, you must sign a &lt;a href=&quot;//cs.brown.edu/courses/cs100/homework/data/2/form.pdf&quot;&gt;release form&lt;/a&gt;. Once you have signed the form, and turned it in to a TA, you will be sent an email containing a password which you can use to access the data. (If you lose this password, please contact us; we will invalidate that password, and generate a new one.) Once you have received your password, you will need to run a script on a CS department machine (e.g., in the Sun lab) to access the data. To do so, open Terminal on a department machine and then copy and paste the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /course/cs100/pub/data/hw2/
+
+./data.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will move you into the correct directory and then run a program that decrypts your data. You will be prompted to enter your password. Please do so. You will not see your password appear on the screen as you type. It may be easiest to simply copy your password from the email the course staff have sent you. If you successfully enter your password, a new file, &lt;code class=&quot;highlighter-rouge&quot;&gt;~/polldata.csv&lt;/code&gt; will appear in your home directory. You may then copy this file to a personal computer, as long as you follow the stipulations in the release form.&lt;/p&gt;
+
+&lt;h3 id=&quot;problems&quot;&gt;Problems:&lt;/h3&gt;
+
+&lt;h4 id=&quot;the-structure-of-the-data&quot;&gt;1. The Structure of the Data&lt;/h4&gt;
+
+&lt;p&gt;1.1. View the data[insert data here]. How many variables are in the data set? How many total observations? Explain the contents of each observation.&lt;/p&gt;
+
+&lt;p&gt;1.2. The “uasid” variable is a unique identifier assigned to each individual in the sample. By assigning identifiers like this, the researchers can track the same participant over time in an anonymous fashion. How many unique individuals are participating in the survey?
+&lt;em&gt;Hint:&lt;/em&gt; the &lt;code class=&quot;highlighter-rouge&quot;&gt;unique&lt;/code&gt; function returns a vector of all the unique values a variable takes on, and the &lt;code class=&quot;highlighter-rouge&quot;&gt;length&lt;/code&gt; function returns the number of entries in a vector.v&lt;/p&gt;
+
+&lt;p&gt;1.3. The “polldate” variable contains the date on which a poll was taken. How many poll results are contained in this data set? Over what time period were these results collected?&lt;/p&gt;
+
+&lt;h4 id=&quot;cleaning-the-data&quot;&gt;2. Cleaning the Data&lt;/h4&gt;
+
+&lt;p&gt;2.1. The “trump_vote”, “clint_vote”, and “other_vote” variables represent the probability that an individual will vote for a candidate, given that the individual votes. Inspect the data to figure out exactly what the “prob_trump”, “prob_clint”, and “prob_other” variables represent. How are these these latter three variables from the former?&lt;/p&gt;
+
+&lt;p&gt;2.2. Summarize the “clint_vote” variable. What do you notice?&lt;/p&gt;
+
+&lt;p&gt;2.3. The “consistent” variable flags observations in which probabilities are either below 0 or greater than 1, or when probabilities do not sum to 1. Filter the data to remove all cases in which the “consistent” variable is equal to 0.&lt;/p&gt;
+
+&lt;h4 id=&quot;likely-versus-unlikely-voters&quot;&gt;3.  Likely versus Unlikely Voters&lt;/h4&gt;
+
+&lt;p&gt;3.1. The likelihood that an individual will vote is recorded in the “prob_vote” variable. Examine this variable by month. Has the mean probability of voting per month increased as we have gotten closer to election day? What about the median? Explain your answers.&lt;/p&gt;
+
+&lt;p&gt;3.2. If our aim is to predict who will win the presidential election in November, should we include all the survey participants in our analysis? If not, who should be excluded, and why?&lt;/p&gt;
+
+&lt;p&gt;3.3 Let’s filter the data once more. Let’s consider likely voters to be those who report a 95% chance or greater of voting on election day; and let’s consider unlikely voters to be those who report a 5% or less chance of voting. Using the consistent data only, construct a data frame of likely voters. Then, construct a data frame of unlikely voters.&lt;/p&gt;
+
+&lt;h4 id=&quot;trumps-popularity-from-july-to-october&quot;&gt;4. Trump’s popularity from July to October&lt;/h4&gt;
+
+&lt;p&gt;4.1 Using only data from the poll conducted on July 5, 2016, provide a point estimate for the probability that a likely voter will vote for Trump, given that the voter will vote in the election. Then, provide a point estimate for the probability that an unlikely voter will vote for Trump, given that the voter will vote in the election. How do these point estimates compare?&lt;/p&gt;
+
+&lt;p&gt;4.2  Build 95% confidence intervals for both point estimates.&lt;/p&gt;
+
+&lt;p&gt;4.3 Repeat parts (b) and (c), but now only use data from October 14, 2016.&lt;/p&gt;
+
+&lt;p&gt;4.4 Describe the differences in your results from July to October. Is Trump’s popularity among likely voters increasing or decreasing?&lt;/p&gt;
+
+&lt;h4 id=&quot;who-will-win-the-election&quot;&gt;5. Who Will Win the Election?&lt;/h4&gt;
+
+&lt;p&gt;Let Pc represent the probability that a likely voter will vote for Clinton, given that the individual votes, and let Pt represent the probability that a likely voter will vote for Trump, given that the individual votes. Perform a hypothesis test to determine whether Pc – Pt is greater than 0 at the 95% confidence level using (all) poll data from October.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Hint:&lt;/em&gt; Be sure not to double count individuals. That is, if an individual responded to the survey more than once in October, collapse that individual’s multiple observations into one. (And be sure to explain your methodology in your handin!)&lt;/p&gt;
+
+&lt;p&gt;5.1 State the null and alternative hypotheses.&lt;/p&gt;
+
+&lt;p&gt;5.2 Calculate the test statistic.&lt;/p&gt;
+
+&lt;p&gt;5.3 What is the p-value associated with the test statistic you calculated in part (b)?&lt;/p&gt;
+
+&lt;p&gt;5.4 What is your conclusion from this hypothesis test?&lt;/p&gt;
+
+&lt;h4 id=&quot;doing-your-own-inference&quot;&gt;6. Doing Your Own Inference&lt;/h4&gt;
+
+&lt;p&gt;Within the dataset, there is demographic information regarding survey respondents. For each respondent, we have information on their age, gender, race, marital status, labor status, income level, education level, and who they voted for in 2012. Select a particular demographic that is of interest to you, and conduct one of the following hypotheses tests:&lt;/p&gt;
+
+&lt;p&gt;6.1  Has the probability that individuals of certain demographic will vote for (insert candidate of your choosing), given that the individual votes, changed from July 5th, 2016 to October 14th, 2016?&lt;/p&gt;
+
+&lt;p&gt;6.2 Given that an individual of a certain demographic will vote, is the probability that they will vote for Clinton the same as the probability they will vote for Trump in October?&lt;/p&gt;
+
+&lt;p&gt;Specific examples of things that you can test (but are certainly not limited to!) include figuring out whether women were as likely to vote for Trump on October 14th as they were on July 5th, and whether people who voted for Romney were more likely to vote for Clinton or Trump on October 14th.&lt;/p&gt;
+
+&lt;p&gt;State the null and alternative hypotheses and the significance level, calculate the test statistic, report the associated p-value, and then write a few sentences explaining your findings.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 17 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/homework/homework-2/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/homework/homework-2/</guid>
+        
+        
+        <category>homework</category>
+        
+      </item>
+    
+      <item>
+        <title>Studio 4: Data Cleaning</title>
+        <description>&lt;h1 id=&quot;cs100-studio-4&quot;&gt;CS100 Studio #4&lt;/h1&gt;
+
+&lt;h3 id=&quot;data-cleaning&quot;&gt;Data Cleaning&lt;/h3&gt;
+
+&lt;h5 id=&quot;week-of-october-10-2016&quot;&gt;Week of October 10, 2016&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;This week in studio, you will be converting messy data into clean, using a few key R libraries that facilitate data cleaning. You will then perform a mini-analysis of the clean data.&lt;/p&gt;
+
+&lt;p&gt;This studio is largely based off a &lt;a href=&quot;https://raw.githubusercontent.com/ICI3D/RTutorials/master/ICI3D_RTutorial_5_DataCleaning.R&quot;&gt;tutorial&lt;/a&gt; created by Dr. Juliet Putnam of the University of Florida. It was presented at the conference &lt;a href=&quot;http://www.ici3d.org/mmed/&quot;&gt;Meaningful Modeling of Epidemiological Data&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Upon completion of all tasks, a TA will give you credit for today’s studio. If you do not manage to complete all the assigned work during the studio period, do not worry. You can continue to work on this assignment until midnight on the Tuesday following this studio. Come by TA hours any time before then to show us your completed work and get credit for today’s studio.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;objectives&quot;&gt;Objectives&lt;/h3&gt;
+&lt;p&gt;By the end of this studio, you will be able to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ensure any data you import into R are interpreted correctly&lt;/li&gt;
+  &lt;li&gt;identify errors and inconsistencies in data&lt;/li&gt;
+  &lt;li&gt;handle those errors and inconsistencies&lt;/li&gt;
+  &lt;li&gt;save your cleaned data set with a date tag&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;setup&quot;&gt;Setup&lt;/h3&gt;
+&lt;p&gt;Before proceeding with the studio, you will need to install a few R libraries for data cleaning. Open RStudio and run the following commands in the console:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;install.packages(&quot;stringr&quot;)
+install.packages(&quot;lubridate&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;As you know, you will be cleaning data in this studio. Our first tip for you is: never overwrite the original data source. Instead, make a copy of the original, and clean &lt;em&gt;only&lt;/em&gt; that copy. Moreover, you should save all of your cleaning commands as an R script, so that you can repeat them easily, as needed, and share them with other data scientists, who may want to understand your methodology and/or reproduce your results.&lt;/p&gt;
+
+&lt;p&gt;It is easiest to debug by trying things out in the console first. So a good rule of thumb (even for seasoned programmers) is to run each line of your script &lt;em&gt;one at a time&lt;/em&gt; in the console, checking that it produces the expected results. In fact, we often write code in the console first, and only copy it to a script after verifying that it works.&lt;/p&gt;
+
+&lt;p&gt;As data cleaning code is not usually that much fun to read (or write!), we will not ask you to report your data cleaning steps in the web pages you produce. So, you do not need to use R Markdown for this part of the studio. Instead, open a new R script by going to &lt;code class=&quot;highlighter-rouge&quot;&gt;File → New File → R Script&lt;/code&gt;. Save the file as &lt;code class=&quot;highlighter-rouge&quot;&gt;Studio4.R&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-data&quot;&gt;The Data&lt;/h3&gt;
+&lt;p&gt;For this studio, we will be using a dataset from an outbreak of foodborne gastrointestinal illness in New York in 1940. The dataset was compiled by an epidemiologist who interviewed 75 attendees of a church supper where the outbreak began. Download &lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/4/outbreak.csv&quot;&gt;outbreak.csv&lt;/a&gt;, and then read in the file using this line of code:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak_original &amp;lt;- read.csv(&quot;/course/cs100/www/studios/data/4/outbreak.csv&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Naming this data frame &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak_original&lt;/code&gt; will designate it as the original (messy) version. We will leave this data frame untouched.&lt;/p&gt;
+
+&lt;p&gt;Read in the data one more time, creating a version that we will clean:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak &amp;lt;- read.csv(&quot;/course/cs100/www/studios/data/4/outbreak.csv&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Great! Next, let’s look at the data to get a feeling for its size, and the variables we have to work with:&lt;/p&gt;
+
+&lt;p&gt;Determine the number of rows with &lt;code class=&quot;highlighter-rouge&quot;&gt;nrow(outbreak)&lt;/code&gt;.
+Determine the number of rows with &lt;code class=&quot;highlighter-rouge&quot;&gt;ncol(outbreak)&lt;/code&gt;.
+Look at the first six rows of data with &lt;code class=&quot;highlighter-rouge&quot;&gt;head(outbreak)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;(What other functions do you know that help you get a feel for a data frame? Try &lt;code class=&quot;highlighter-rouge&quot;&gt;glimpse(outbreak)&lt;/code&gt;, a dplyr function, if you haven’t already.)&lt;/p&gt;
+
+&lt;p&gt;For each individual in our data set, we have the following information:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;age - the person’s age in years&lt;/li&gt;
+  &lt;li&gt;sex - the person’s gender&lt;/li&gt;
+  &lt;li&gt;timesupper - the time the person ate (to the nearest half hour)&lt;/li&gt;
+  &lt;li&gt;ill - whether the person developed gastrointestinal illness after the supper&lt;/li&gt;
+  &lt;li&gt;onsetdate - the date of onset of illness for those who became ill&lt;/li&gt;
+  &lt;li&gt;onsettime - the time the person reported first feeling ill (to the nearest half hour)&lt;/li&gt;
+  &lt;li&gt;15 variables indicating whether the person reported eating specific food items at the supper&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Before you continue on, write down what you think the data type of each variable should be. R’s basic data types include:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;numeric - subcategories include “integer” (whole numbers) and “double” (numbers with decimals)&lt;/li&gt;
+  &lt;li&gt;logical - the value TRUE or FALSE&lt;/li&gt;
+  &lt;li&gt;character - strings&lt;/li&gt;
+  &lt;li&gt;factor - categorical variables&lt;/li&gt;
+  &lt;li&gt;datetime - either “POSIXlt” or “POSIXct”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cleaning-numeric-data&quot;&gt;Cleaning Numeric Data&lt;/h3&gt;
+&lt;p&gt;We will go through each column in the data set to ensure that R treats each variable as the appropriate data type.&lt;/p&gt;
+
+&lt;p&gt;Let’s first look at the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;age&lt;/code&gt;, which we should expect to be &lt;code class=&quot;highlighter-rouge&quot;&gt;numeric&lt;/code&gt;. Check whether this is the case using: &lt;code class=&quot;highlighter-rouge&quot;&gt;is.numeric(outbreak$age)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You will see that this command returns &lt;code class=&quot;highlighter-rouge&quot;&gt;FALSE&lt;/code&gt;, meaning that &lt;code class=&quot;highlighter-rouge&quot;&gt;age&lt;/code&gt; is being stored as something other than numeric. To learn what that type is, run &lt;code class=&quot;highlighter-rouge&quot;&gt;class(outbreak$age)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We can look at the different &lt;code class=&quot;highlighter-rouge&quot;&gt;age&lt;/code&gt; values to see what may be going wrong: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$age&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;One of the values was entered as the string “seven” rather than the number 7. Then, when R imported the data, the entire column was read in as strings, and the data type deemed factor.&lt;/p&gt;
+
+&lt;p&gt;“Levels” are the different values (i.e., categories) of a factor. To correct the error, we will replace the level “seven” with the level “7”:&lt;/p&gt;
+
+&lt;p&gt;Display the original levels: &lt;code class=&quot;highlighter-rouge&quot;&gt;levels(outbreak$age)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Change the level “seven” to “7”: &lt;code class=&quot;highlighter-rouge&quot;&gt;levels(outbreak$age)[levels(outbreak$age) == &quot;seven&quot;] &amp;lt;- &quot;7&quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Display the updated levels: &lt;code class=&quot;highlighter-rouge&quot;&gt;levels(outbreak$age)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that the number of levels has decreased from 47 to 46. This is because there was already a level “7” and R has correctly interpreted the renaming of level “seven” to mean that we want that level to become part of the original level “7”.&lt;/p&gt;
+
+&lt;p&gt;The values for &lt;code class=&quot;highlighter-rouge&quot;&gt;age&lt;/code&gt; are now: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$age&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;All the remaining levels look like integers, so we can now think about converting the variable to a numeric. To make sure we do this properly, we’ll create a new variable &lt;code class=&quot;highlighter-rouge&quot;&gt;AGE&lt;/code&gt; and check that the conversion has worked the way we want it to before making any changes to the data frame.&lt;/p&gt;
+
+&lt;p&gt;Convert the factor to a numeric class: &lt;code class=&quot;highlighter-rouge&quot;&gt;AGE &amp;lt;- as.numeric(as.character(outbreak$age))&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Check the conversion: &lt;code class=&quot;highlighter-rouge&quot;&gt;class(AGE)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;View the new version of the variable: &lt;code class=&quot;highlighter-rouge&quot;&gt;AGE&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Compare to original version of the variable: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$age&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This looks good! We can now replace the column in the data frame with our new vector:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$age &amp;lt;- AGE&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, we should check that all the values in our numeric age vector make sense. To get a quick idea, we can look at the range of values in the vector:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;range(outbreak$age)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;At least one value is outside the range we expect for age in years. We can look into this in more detail by looking at a histogram of the data:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hist(outbreak$age, xlab = &quot;Age in Years&quot;, main = &quot;Distribution of Ages&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;It looks like most of the values are in a plausible range. To confirm this, let’s look at the subset of the data for which age is over 100:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;subset(outbreak, age &amp;gt; 100)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;There’s only one problematic observation (row 28). At this stage, we would ideally go back to the source of the data, and find out what the actual value should be. The original version of this tutorial reports that there was a data-entry error in which too many twos were entered, and that the value should have been 62. We can easily correct this error.&lt;/p&gt;
+
+&lt;p&gt;Replace the value in row 28: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$age[28] &amp;lt;- 62&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Look at the corrected version of row 28: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak[28,  ]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Recreate and then re-examine the histogram: &lt;code class=&quot;highlighter-rouge&quot;&gt;hist(outbreak$age, main = &quot;Distribution of Ages&quot;, xlab = &quot;Age in Years&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cleaning-categorical-data&quot;&gt;Cleaning Categorical Data&lt;/h3&gt;
+&lt;p&gt;We’ll now repeat this process of examining and correcting the data for the next column &lt;code class=&quot;highlighter-rouge&quot;&gt;sex&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Again, we’ll determine how R is currently treating the variable: &lt;code class=&quot;highlighter-rouge&quot;&gt;class(outbreak$sex)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;R seems to think that sex is a numeric value and is treating the variable as an integer. This is strange. Let’s see if we can figure out why, by looking at the values in the vector: &lt;code class=&quot;highlighter-rouge&quot;&gt;range(outbreak$sex)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The values of the vector range from -1 to 2, which explains why R is considering them to be integer. Let’s see the different integer values and how many occurrences there are for each value: &lt;code class=&quot;highlighter-rouge&quot;&gt;table(outbreak$sex)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;*Note: the &lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt; function tabulates the number of occurrences of each level of a categorical variable.&lt;/p&gt;
+
+&lt;p&gt;There are only 3 values and mostly the values are 1 and 2. Given the name of the column you can probably guess that 1 and 2 are numeric codes for Male and Female, but you would have to find out from the data source which is which. If possible, you should also go to the source to find out whether the value -1 is a typo or has some sort of meaning (such as standing in for a missing value).&lt;/p&gt;
+
+&lt;p&gt;In this case, it turns out the value -1 was a typo and should have been a 1. Also, 1 stands for Female and 2 stands for Male.&lt;/p&gt;
+
+&lt;p&gt;First, let’s correct the value we know is wrong:&lt;/p&gt;
+
+&lt;p&gt;Get the index of the row with the error: &lt;code class=&quot;highlighter-rouge&quot;&gt;sex_error &amp;lt;- which(outbreak$sex == -1)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Replace the erroneous value: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$sex[sex_error] &amp;lt;- 1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Look at the corrected row: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak[sex_error, ]&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s look at the table of values again, now that we’ve made the correction: &lt;code class=&quot;highlighter-rouge&quot;&gt;table(outbreak$sex)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now all that’s left is to format the variable so that R interprets these values as categories. To do so, we’ll use the &lt;code class=&quot;highlighter-rouge&quot;&gt;factor()&lt;/code&gt; function. First, let’s look at the help file for this function using &lt;code class=&quot;highlighter-rouge&quot;&gt;?factor&lt;/code&gt;. There are three arguments: &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; (the input vector), &lt;code class=&quot;highlighter-rouge&quot;&gt;levels&lt;/code&gt; (the current values), and &lt;code class=&quot;highlighter-rouge&quot;&gt;labels&lt;/code&gt; (the categorical names for the values).&lt;/p&gt;
+
+&lt;p&gt;Create a factor and assign it to a new vector SEX: &lt;code class=&quot;highlighter-rouge&quot;&gt;SEX &amp;lt;- factor(outbreak$sex, levels = c(1, 2), labels = c(&quot;Female&quot;, &quot;Male&quot;))&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;We can check that this vector is correctly stored as a factor: &lt;code class=&quot;highlighter-rouge&quot;&gt;is.factor(SEX)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To make sure we’ve made the conversion correctly, let’s compare the table of values for the original vector and our new vector:&lt;/p&gt;
+
+&lt;p&gt;Table of original values: &lt;code class=&quot;highlighter-rouge&quot;&gt;table(outbreak$sex)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Table of new values: &lt;code class=&quot;highlighter-rouge&quot;&gt;table(SEX)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;These are comparable, so we can now replace the original vector with the new one: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$sex &amp;lt;- SEX&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cleaning-data-on-dates-and-times&quot;&gt;Cleaning Data on Dates and Times&lt;/h3&gt;
+&lt;p&gt;The next column represents the times that people ate. R has a built-in data type specifically for dates and times: “POSIXlt” and “POSIXct”. To process dates, we will use the &lt;code class=&quot;highlighter-rouge&quot;&gt;lubridate&lt;/code&gt; library. Load it using &lt;code class=&quot;highlighter-rouge&quot;&gt;library(lubridate)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;As before, we’ll use the class function to determine how R is currently treating the variable: &lt;code class=&quot;highlighter-rouge&quot;&gt;class(outbreak$timesupper)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;R seems to think the variable has a numeric value and is treating the variable as an integer. This doesn’t seem too unreasonable. Let’s check the range of values: &lt;code class=&quot;highlighter-rouge&quot;&gt;range(outbreak$timesupper)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Well, that doesn’t help, except to tell us that some values are missing for this variable. Let’s try again, this time removing the missing values: &lt;code class=&quot;highlighter-rouge&quot;&gt;range(outbreak$timesupper, na.rm = TRUE)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This looks like it may be telling us the time in hours and minutes, which is, in fact, the case. All the individuals with a known supper time ate between 18:30 and 22:00, which are normal supper times.&lt;/p&gt;
+
+&lt;p&gt;Now that we have checked the validity of the data, let’s normalize these values.&lt;/p&gt;
+
+&lt;p&gt;While we have the time of the supper, we also want to include the date. All of the suppers took place on April 18, 1940: &lt;code class=&quot;highlighter-rouge&quot;&gt;supper_date &amp;lt;- &quot;19400418&quot;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We can use the command &lt;code class=&quot;highlighter-rouge&quot;&gt;paste&lt;/code&gt; to combine supper date and time into one variable: &lt;code class=&quot;highlighter-rouge&quot;&gt;supper_dt &amp;lt;- paste(supper_date, outbreak$timesupper)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s look at the first six datetime values: &lt;code class=&quot;highlighter-rouge&quot;&gt;head(supper_dt)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You will notice that these values are long sequences of numbers, which are hard to read. If you run &lt;code class=&quot;highlighter-rouge&quot;&gt;class(supper_dt)&lt;/code&gt;, you will learn that they are being stored as character strings. Let’s use &lt;code class=&quot;highlighter-rouge&quot;&gt;lubridate&lt;/code&gt; to parse these sequences into datetime objects. Our sequences are ordered as year, month, date, hour, minute, so we can use this parse command: &lt;code class=&quot;highlighter-rouge&quot;&gt;supper_datetime &amp;lt;- ymd_hm(supper_dt)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now let’s re-examine the first six datetime values: &lt;code class=&quot;highlighter-rouge&quot;&gt;head(supper_datetime)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then the class: &lt;code class=&quot;highlighter-rouge&quot;&gt;class(supper_datetime)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You should see that these values are now being stored as &lt;code class=&quot;highlighter-rouge&quot;&gt;POSIXct&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;POSIXt&lt;/code&gt;, which are the datetime data types. Now that &lt;code class=&quot;highlighter-rouge&quot;&gt;supper_datetime&lt;/code&gt; is normalized, let’s add this column to our outbreak data frame: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$supperdatetime &amp;lt;- supper_datetime&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we want to normalize date-times for the onset of illness. Let’s first look at the different values for the column onsettime: &lt;code class=&quot;highlighter-rouge&quot;&gt;table(outbreak$onsettime)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In order for &lt;code class=&quot;highlighter-rouge&quot;&gt;lubridate&lt;/code&gt; to parse these times correctly, we need to convert all of the values to a four-digit format of “hhmm”. For example, we want the value “30” to be “0030” and the value “100” to be “0100”. To do so, let’s use the &lt;code class=&quot;highlighter-rouge&quot;&gt;stringr&lt;/code&gt; library, which you can load in the usual way: &lt;code class=&quot;highlighter-rouge&quot;&gt;library(stringr)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To pad on zeroes to the front of each time, resulting in each time being represented by four digits, use the command: &lt;code class=&quot;highlighter-rouge&quot;&gt;onsettime_new &amp;lt;- str_pad(outbreak$onsettime, 4, pad = &quot;0&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Look at the results: &lt;code class=&quot;highlighter-rouge&quot;&gt;head(onsettime_new)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s look at values for the variable onsetdate: &lt;code class=&quot;highlighter-rouge&quot;&gt;table(outbreak$onsetdate)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, so that &lt;code class=&quot;highlighter-rouge&quot;&gt;lubridate&lt;/code&gt; can parse these dates correctly, we should convert them into a numeric format. We can use &lt;code class=&quot;highlighter-rouge&quot;&gt;stringr&lt;/code&gt; once again, replacing each date with its numerical sequence equivalent:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;onsetdate_new &amp;lt;- str_replace(outbreak$onsetdate, '18-Apr', '19400418')&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;onsetdate_new &amp;lt;- str_replace(onsetdate_new, '19-Apr', '19400419')&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Look at the results: &lt;code class=&quot;highlighter-rouge&quot;&gt;head(onsetdate_new)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now merge the onset date and time: &lt;code class=&quot;highlighter-rouge&quot;&gt;onsetdt &amp;lt;- paste(onsetdate_new, onsettime_new, sep = &quot;&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To see the merged results, use: &lt;code class=&quot;highlighter-rouge&quot;&gt;head(onsetdt)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;When both column values were “NA”, the merged value resulted in “NANA”. Let’s convert this back to the appropriate missing data value “NA”: &lt;code class=&quot;highlighter-rouge&quot;&gt;onsetdt &amp;lt;- str_replace(onsetdt, 'NANA', 'NA')&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Once again, to view the results, use: &lt;code class=&quot;highlighter-rouge&quot;&gt;head(onsetdt)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Great! Now we can finally parse this numeric sequence using &lt;code class=&quot;highlighter-rouge&quot;&gt;lubridate&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;onset_datetime &amp;lt;- ymd_hm(onsetdt)&lt;/code&gt;. Look at the results using &lt;code class=&quot;highlighter-rouge&quot;&gt;head(onset_datetime)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;When you check the data type using &lt;code class=&quot;highlighter-rouge&quot;&gt;class(onset_datetime)&lt;/code&gt;, you will see that it is stored as “POSIXct” and “POSIXt”.  Since we now know that &lt;code class=&quot;highlighter-rouge&quot;&gt;onset_datetime&lt;/code&gt; is normalized, we can add this column to our outbreak data frame: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreak$onsetdatetime &amp;lt;- onset_datetime&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s visualize the distribution of onset datetimes: &lt;code class=&quot;highlighter-rouge&quot;&gt;hist(outbreak$onsetdatetime, breaks=&quot;hours&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;save-the-data&quot;&gt;Save the Data&lt;/h3&gt;
+
+&lt;p&gt;Lastly, we have to make sure that the column &lt;code class=&quot;highlighter-rouge&quot;&gt;ill&lt;/code&gt; and the columns for the different foods are &lt;code class=&quot;highlighter-rouge&quot;&gt;logical&lt;/code&gt; (TRUE if the food was consumed, FALSE if it was not). To quickly do so, run the command &lt;code class=&quot;highlighter-rouge&quot;&gt;str(outbreak)&lt;/code&gt;, which allows you to see the data type and first few values of each variable.&lt;/p&gt;
+
+&lt;p&gt;If this looks good, let’s save this cleaned version of the dataset. We will save the dataset in two forms: &lt;code class=&quot;highlighter-rouge&quot;&gt;.rds&lt;/code&gt; (R data format) and &lt;code class=&quot;highlighter-rouge&quot;&gt;.csv&lt;/code&gt;. Both file types will store the same values, but the benefit of using &lt;code class=&quot;highlighter-rouge&quot;&gt;.rds&lt;/code&gt; is that it preserves all of the variables’ data types. For example, “POSIXlt” and “POSIXct” are data types specific to R, so only an &lt;code class=&quot;highlighter-rouge&quot;&gt;.rds&lt;/code&gt; file can save datetime objects. &lt;code class=&quot;highlighter-rouge&quot;&gt;.csv&lt;/code&gt; files cannot store values as “POSIXlt” and “POSIXct”, so saving to a &lt;code class=&quot;highlighter-rouge&quot;&gt;.csv&lt;/code&gt; file will store all datetime objects as strings instead.&lt;/p&gt;
+
+&lt;p&gt;We want both filenames to include today’s date, so that we know when we created the file. You can get today’s date using lubridate’s &lt;code class=&quot;highlighter-rouge&quot;&gt;today()&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;p&gt;Let’s create the csv file first. To set the filename, run &lt;code class=&quot;highlighter-rouge&quot;&gt;filename_csv &amp;lt;- paste(&quot;outbreakClean&quot;, today(), &quot;.csv&quot;, sep=&quot;&quot;)&lt;/code&gt;. Then to create your csv file, run &lt;code class=&quot;highlighter-rouge&quot;&gt;write.csv(outbreak, file = filename_csv)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now for the rds file. To set the filename, run &lt;code class=&quot;highlighter-rouge&quot;&gt;filename_rds &amp;lt;- paste(&quot;outbreakClean&quot;, today(), &quot;.rds&quot;, sep=&quot;&quot;))&lt;/code&gt;. Then to save your rds file, run &lt;code class=&quot;highlighter-rouge&quot;&gt;saveRDS(outbreak, file=filename_rds)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;analysis&quot;&gt;Analysis&lt;/h3&gt;
+&lt;p&gt;Now that you have cleaned the data, you can analyze it! Let’s pretend that you’re the epidemiologist who interviewed the 75 individuals where the outbreak began. The local health department is now asking you report some findings about the outbreak.&lt;/p&gt;
+
+&lt;p&gt;Create your report using R Markdown. Your final HTML document should include both your code and results.&lt;/p&gt;
+
+&lt;p&gt;To load your clean &lt;code class=&quot;highlighter-rouge&quot;&gt;.rds&lt;/code&gt; file, run the following command: &lt;code class=&quot;highlighter-rouge&quot;&gt;outbreakClean &amp;lt;- readRDS(&quot;outbreakClean&amp;lt;date-here&amp;gt;.rds&quot;)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;*Note: You may find the commands &lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;subset&lt;/code&gt; useful here.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Report the number of interviewees who got sick vs. those who did not get sick.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Determine the number of males who got sick vs. those who did not get sick. Do the same for females. Were a greater proportion of males or females affected during the outbreak?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;For the individuals who got sick, report the average the incubation period (the number of hours between supper time and the onset of illness). Then report the median and the range of incubation periods. *Hint: one of the benefits of using the normalized “POSIXct” and “POSIXt” datetime objects is that you can easily perform arithmetic (e.g., for this problem, subtract one date from another to determine the time difference).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a histogram of the ages of those who got sick. Compare it to a histogram for those who did not get sick. Does there seem to be a difference in the age distributions?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The health department has attributed the outbreak to contamination in an ice cream production facility. The department now wants you to determine the flavor that was contaminated: vanilla or chocolate?&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;When you are finished writing up your results, show your HTML file to a TA. The TA will then check your answers and give you credit for the studio.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 12 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/studios/studio-4/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/studios/studio-4/</guid>
+        
+        
+        <category>studios</category>
+        
+      </item>
+    
+      <item>
+        <title>Homework 1.5</title>
+        <description>&lt;h1 id=&quot;cs100-mini-project&quot;&gt;CS100 Mini-Project&lt;/h1&gt;
+
+&lt;h3 id=&quot;fun-with-eda&quot;&gt;Fun with EDA!&lt;/h3&gt;
+
+&lt;h5 id=&quot;due-october-14-2016-at-10-pm&quot;&gt;Due: October 14, 2016, at 10 pm&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;Please submit your write up to Canvas, including your suppressed code, as an R markdown (.Rmd) file. Please also run &lt;code class=&quot;highlighter-rouge&quot;&gt;Knit HTML&lt;/code&gt; on your R markdown file, and submit the resulting .HTML file as well.&lt;/p&gt;
+
+&lt;p&gt;Be sure to follow the CS100 course collaboration policy as you work on this and all CS100 assignments.&lt;/p&gt;
+
+&lt;h3 id=&quot;overview&quot;&gt;Overview:&lt;/h3&gt;
+&lt;p&gt;The goal of this mini project is for you to complete and exploratory data analysis by applying the concepts and tools you learned during the first month of class. We will soon be progressing to statistics and machine learning, but the first step in working with data should always be EDA, as it can be a window offering powerful insights into your data.&lt;/p&gt;
+
+&lt;p&gt;To complete this mini project, your best bet will be to pair up with one of your partners from Studio 2 or Studio 3, as you will have the choice of further exploring either the &lt;a href=&quot;http://cs.brown.edu/courses/cs100/homework/data/1.5/international_development.zip&quot;&gt;international development&lt;/a&gt; (ZIP) or the &lt;a href=&quot;http://cs.brown.edu/courses/cs100/studios/data/3/responses.csv&quot;&gt;Slovakian youth survey&lt;/a&gt; data. Alternatively, you can further explore the full &lt;a href=&quot;http://cs.brown.edu/courses/cs100/homework/data/1/nationalNames.csv&quot;&gt;baby names data set&lt;/a&gt; with a brand new partner.&lt;/p&gt;
+
+&lt;p&gt;If you have trouble finding a partner, please email the TAs at cs100tas@cs.brown.edu, and we will match you up with someone.&lt;/p&gt;
+
+&lt;h3 id=&quot;exploratory-data-analysis&quot;&gt;Exploratory Data Analysis&lt;/h3&gt;
+&lt;p&gt;During your recent studio and homework assignments, you performed cursory explorations of several reasonably large data sets. You goal in this mini-project is to spend some time rounding out one of these cursory explorations to produce more conclusive evidence supporting the hypotheses you formulate.&lt;/p&gt;
+
+&lt;p&gt;You should feel free to use all the R tools at your disposal to find an interesting story in the data, and to create informative charts. You should then write a short summary of your discoveries in R Markdown, suppressing code for, but nonetheless displaying, relevant charts. Your aim in this write up is to convince us that your conclusions are valid.&lt;/p&gt;
+
+&lt;p&gt;This mini-project is a pair programming project because collaboration will give you a chance to vet your ideas. Your partner can find holes in your ideas, and likewise you in theirs. We also encourage you to visit the course staff during their office hours, so you can run your ideas by them as well for further (constructive) criticism.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 07 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/homework/homework-1.5/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/homework/homework-1.5/</guid>
+        
+        
+        <category>homework</category>
+        
+      </item>
+    
+      <item>
+        <title>Studio 3: dplyr and Plotting</title>
+        <description>&lt;h1 id=&quot;cs100-studio-3&quot;&gt;CS100 Studio #3&lt;/h1&gt;
+
+&lt;h3 id=&quot;dplyr-and-plotting&quot;&gt;dplyr and Plotting&lt;/h3&gt;
+
+&lt;h5 id=&quot;week-of-october-3-2016&quot;&gt;Week of October 3, 2016&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;During this week’s studio, you will be learning how to use the dplyr library, and to produce plots using the mosaic library. You will also be using RStudio to interface with R.&lt;/p&gt;
+
+&lt;p&gt;Until very recently, you have been conducting your data analyses using LibreOffice Calc. While R is a different, and more powerful, tool, the concepts you have learned will continue to apply.&lt;/p&gt;
+
+&lt;p&gt;Upon completion of all tasks, a TA will give you credit for today’s studio. If you do not manage to complete all the assigned work during the studio period, do not worry. You can continue to work on this assignment until midnight on the Tuesday following this studio. Come by TA hours any time before then to show us your completed work and get credit for today’s studio.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;objectives&quot;&gt;Objectives&lt;/h3&gt;
+&lt;p&gt;By the end of this studio, you will better understand how to use R to conduct a basic data analysis. Specifically, you will learn about:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Libraries&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;R Markdown&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Data analysis in dplyr&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Visualizations in mosaic&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;setup&quot;&gt;Setup&lt;/h3&gt;
+&lt;p&gt;Before proceeding with the studio, you will need to install a few R libraries. They are: &lt;code class=&quot;highlighter-rouge&quot;&gt;dplyr&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ggplot2&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;mosaic&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;manipulate&lt;/code&gt;. Open RStudio and run the following commands in the console:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;install.packages(&quot;dplyr&quot;)
+install.packages(&quot;ggplot2&quot;)
+install.packages(&quot;mosaic&quot;)
+install.packages(&quot;manipulate&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;r-markdown&quot;&gt;R Markdown&lt;/h3&gt;
+
+&lt;p&gt;In previous studios, you have used markdown. Today, you will using an extension of markdown called &lt;strong&gt;R Markdown&lt;/strong&gt;, which facilitates the embedding of R code and R plots into markdown files. Just as you created a markdown file last week, which you then converted to HTML and eventually posted as a web page, today you will be creating an &lt;em&gt;R&lt;/em&gt; markdown file, and then converting it to a HTML, and posting it.&lt;/p&gt;
+
+&lt;p&gt;Create a new R Markdown file by going to &lt;code class=&quot;highlighter-rouge&quot;&gt;File -&amp;gt; New File -&amp;gt; R Markdown...&lt;/code&gt;. If this is your first time creating an R Markdown file, R studio will prompt you to install a few packages. Allow the process to proceed. Upon completion, you will see a window in which to name your file, which looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;//cs.brown.edu/courses/cs100/studios/img/3/rmarkdown_new_file.png&quot; alt=&quot;new_file&quot; style=&quot;width: 50%; height: 50%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Set the Title to &lt;code class=&quot;highlighter-rouge&quot;&gt;CS100 Studio 3&lt;/code&gt; and the Author to your name. Leave &lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt; selected on the left and &lt;code class=&quot;highlighter-rouge&quot;&gt;HTML&lt;/code&gt; selected under the “Default Output Format”. Once you click on &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;, the file will be created with a default template filled in. Read through the content of the R Markdown template. When you are ready, click &lt;code class=&quot;highlighter-rouge&quot;&gt;Knit HTML&lt;/code&gt; in the toolbar of the RStudio scripts pane to see how the document renders as HTML.&lt;/p&gt;
+
+&lt;p&gt;Most, if not all, of the basic features you are already familiar with in Markdown are also available in R Markdown. What is unique is the ability to also add snippets of R code and their outputs. Together, these are called “R code chunks”.&lt;/p&gt;
+
+&lt;p&gt;An example of an R code chunk is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```{r}
+x &amp;lt;- 0
+x
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;When you render this Markdown, &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; will be assigned to &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;, and the value of &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;, namely 0, will be displayed.&lt;/p&gt;
+
+&lt;p&gt;If you want to hide your R code, but display the output, you can add &lt;code class=&quot;highlighter-rouge&quot;&gt;echo=FALSE&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```{r, echo=FALSE}
+x &amp;lt;- 0
+x
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In this example, the value of x will be displayed, but the underlying code will not be rendered. You should use &lt;code class=&quot;highlighter-rouge&quot;&gt;echo=FALSE&lt;/code&gt; if you want to depict a plot, but hide the code that generates it.&lt;/p&gt;
+
+&lt;p&gt;Alternatively, you may want to display code without running it (or displaying its output). To accomplish this, use &lt;code class=&quot;highlighter-rouge&quot;&gt;eval=FALSE&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```{r, eval=FALSE}
+x &amp;lt;- 0
+x
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Some more details on R code chunks can be found &lt;a href=&quot;http://rmarkdown.rstudio.com/authoring_rcodechunks.html&quot;&gt;here&lt;/a&gt;. In addition, &lt;a href=&quot;https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf&quot;&gt;here&lt;/a&gt; is a handy cheat sheet for R Markdown.&lt;/p&gt;
+
+&lt;p&gt;Like last week, in today’s studio you will be using R Markdown to write a report that you will then share on the course website. At any time during this studio, you should feel free to click &lt;code class=&quot;highlighter-rouge&quot;&gt;Knit HTML&lt;/code&gt; to see how your R Markdown file will render.&lt;/p&gt;
+
+&lt;p&gt;Before proceeding, delete the lines after the header in the default template, and save the file.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;hypotheses-from-lecture&quot;&gt;Hypotheses from lecture&lt;/h3&gt;
+
+&lt;p&gt;Let’s refer back to &lt;a href=&quot;http://cs.brown.edu/courses/cs100/lectures/lecture9b.pdf&quot;&gt;lecture 9b&lt;/a&gt;, which contains a quick introduction to dplyr using the Slovakian youth survey data set. In the lecture, we formulated a variety of hypotheses based on very incomplete pictures of the data – only the first 6 rows of various data frames. Today in studio, you will do better: after querying the data set to generate specific data frames, you will be analyzing those frames in their entirety.&lt;/p&gt;
+
+&lt;p&gt;Add the following code chunk to your R Markdown file. Then run each line of code.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```{r setup, include=FALSE}
+responses &amp;lt;- read.table(&quot;/course/cs100/www/studios/data/3/responses.csv&quot;, sep = &quot;;&quot;, header = TRUE)
+library(dplyr)
+library(manipulate)
+library(mosaic)
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This code reads in the data set. It then loads the &lt;code class=&quot;highlighter-rouge&quot;&gt;dplyr&lt;/code&gt; library, which we will use for data wrangling, and the &lt;code class=&quot;highlighter-rouge&quot;&gt;mosaic&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;manipulation&lt;/code&gt; libraries, which we will use for plotting.&lt;/p&gt;
+
+&lt;p&gt;Next, let’s take a look at a few of the hypotheses mentioned in lecture.&lt;/p&gt;
+
+&lt;h5 id=&quot;hypothesis-1-do-more-friends-lead-to-more-more-happiness&quot;&gt;Hypothesis 1: Do more friends lead to more more happiness?&lt;/h5&gt;
+
+&lt;p&gt;To investigate this first hypothesis, we’d like to determine whether or not there is a relationship between the respondents’ number of friends and their happiness levels. From &lt;code class=&quot;highlighter-rouge&quot;&gt;responses&lt;/code&gt;, select &lt;code class=&quot;highlighter-rouge&quot;&gt;Number.of.friends&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Happiness.in.life&lt;/code&gt;, sort by &lt;code class=&quot;highlighter-rouge&quot;&gt;Number.of.friends&lt;/code&gt; in descending order, and save the output to the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;friends_vs_happiness&lt;/code&gt;. Please refer to the lecture slides to help you write this code. If done correctly, the top 6 rows (&lt;code class=&quot;highlighter-rouge&quot;&gt;head(friends_vs_happiness)&lt;/code&gt;) should be:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  Number.of.friends Happiness.in.life
+1                 5                 5
+2                 5                 5
+3                 5                 4
+4                 5                 4
+5                 5                 4
+6                 5                 2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In your R Markdown file, create a new section titled “Hypothesis 1”, and add your code in a code chunk.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; In this studio (and in most, if not all assignments), do not use &lt;code class=&quot;highlighter-rouge&quot;&gt;echo=FALSE&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;eval=FALSE&lt;/code&gt; with any of your code chunks, since we want to see both your code and results.&lt;/p&gt;
+
+&lt;p&gt;Next, we will plot these two variables against one another. Using the &lt;code class=&quot;highlighter-rouge&quot;&gt;mosaic&lt;/code&gt; library, we can plot &lt;code class=&quot;highlighter-rouge&quot;&gt;friends_vs_happiness&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;mplot&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mplot(friends_vs_happiness)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You will receive the following prompt:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Choose a plot type. 
+
+1: 1-variable (histogram, density plot, etc.)
+2: 2-variable (scatter, boxplot, etc.)
+3: map
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s plot our two quantitative variables using a scatter plot. To do so, type in &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt; and then enter. A &lt;code class=&quot;highlighter-rouge&quot;&gt;manipulate&lt;/code&gt; window with sliders and drop down menus will appear. For this hypothesis, the “Type of plot” we will be using is jitter, because the exact values of responses overlap, making it hard to distinguish the abundance of answers relative to the 2 variables. Jitter adds a small random value to each point.&lt;/p&gt;
+
+&lt;p&gt;Click on the &lt;code class=&quot;highlighter-rouge&quot;&gt;Show Expression&lt;/code&gt; button and copy the expression to your R Markdown file within its own code block.&lt;/p&gt;
+
+&lt;p&gt;To exit the manipulate window, click on the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&lt;/code&gt; in the upper right-hander corner of that window.&lt;/p&gt;
+
+&lt;p&gt;Does there seems to be a relationship between the two variables? Explain your answer in your R Markdown file.&lt;/p&gt;
+
+&lt;h5 id=&quot;hypothesis-2-does-gender-relate-to-happiness-among-slovakian-youth&quot;&gt;Hypothesis 2: Does gender relate to happiness among Slovakian youth?&lt;/h5&gt;
+
+&lt;p&gt;Now we’d like to determine if there is a relationship between gender and happiness. Using &lt;code class=&quot;highlighter-rouge&quot;&gt;dplyr&lt;/code&gt;, select &lt;code class=&quot;highlighter-rouge&quot;&gt;Gender&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Happiness.in.life&lt;/code&gt;. Assign the output to &lt;code class=&quot;highlighter-rouge&quot;&gt;gender_vs_happiness&lt;/code&gt;. If you omit NAs, which you need not, when &lt;code class=&quot;highlighter-rouge&quot;&gt;head(gender_vs_happiness)&lt;/code&gt; is called, the output should be:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  Gender Happiness.in.life
+1 female                 4
+2 female                 4
+3 female                 4
+4 female                 2
+5 female                 3
+6   male                 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Use a boxplot to summarize the range of values for happiness by gender. Like before, type&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mplot(gender_vs_happiness)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But this time select a boxplot.&lt;/p&gt;
+
+&lt;p&gt;Include both the &lt;code class=&quot;highlighter-rouge&quot;&gt;dplyr&lt;/code&gt; code and plot expression (which again you can obtain by clicking on &lt;code class=&quot;highlighter-rouge&quot;&gt;Show Expression&lt;/code&gt;) in an R code chunk. Describe your findings about the hypothesis.&lt;/p&gt;
+
+&lt;h5 id=&quot;hypothesis-3-what-about-happiness-and-age&quot;&gt;Hypothesis 3: What about happiness and age?&lt;/h5&gt;
+
+&lt;p&gt;Finally, let’s see if there is a relationship between happiness and age. Omit rows that contain &lt;code class=&quot;highlighter-rouge&quot;&gt;NA&lt;/code&gt; and select &lt;code class=&quot;highlighter-rouge&quot;&gt;Age&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Happiness.in.life&lt;/code&gt;. Group by age, and then summarize the average &lt;code class=&quot;highlighter-rouge&quot;&gt;Happiness.in.life&lt;/code&gt; of each &lt;code class=&quot;highlighter-rouge&quot;&gt;Age&lt;/code&gt; group (and assign this average to the variable named &lt;code class=&quot;highlighter-rouge&quot;&gt;avg_happiness&lt;/code&gt;). Assign the output of this entire statement to &lt;code class=&quot;highlighter-rouge&quot;&gt;happiness_vs_age&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Generate a scatter plot of &lt;code class=&quot;highlighter-rouge&quot;&gt;happiness_vs_age&lt;/code&gt;, with the x variable set to &lt;code class=&quot;highlighter-rouge&quot;&gt;Age Group&lt;/code&gt; and the y variable set to the average happiness for that age group.&lt;/p&gt;
+
+&lt;p&gt;Include both the &lt;code class=&quot;highlighter-rouge&quot;&gt;dplyr&lt;/code&gt; code and plot code in a R code chunk. Report whether you observe a relationship between the two variables.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;conduct-your-own-analysis&quot;&gt;Conduct your own analysis&lt;/h3&gt;
+
+&lt;p&gt;To conclude this studio, we would like you to explore the data set a bit more on your own to come up with your own hypotheses. To see all the variables in the data set, you can use the R command &lt;code class=&quot;highlighter-rouge&quot;&gt;names(responses)&lt;/code&gt;, and to understand what each variable represents, you can read through the &lt;a href=&quot;https://www.kaggle.com/miroslavsabo/young-people-survey&quot;&gt;survey questionnaire&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Investigate 3 more hypotheses (so that you have a total of 6). For each hypothesis, you should:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;select()&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;filter()&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;arrange()&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;mutate()&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;group_by()&lt;/code&gt;, or &lt;code class=&quot;highlighter-rouge&quot;&gt;summarize()&lt;/code&gt; to manipulate the data&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Visualize the data with charts produced with &lt;code class=&quot;highlighter-rouge&quot;&gt;mplot()&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Describe your findings&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Include all of your code and results in your R Markdown file. When you are happy with your work, show your file to a TA. The TA will then upload the file to the course website and check you off for the studio.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 05 Oct 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/studios/studio-3/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/studios/studio-3/</guid>
+        
+        
+        <category>studios</category>
+        
+      </item>
+    
+      <item>
+        <title>Studio 2: More Fun with Speadsheet</title>
+        <description>&lt;h1 id=&quot;cs100-studio-2&quot;&gt;CS100 Studio #2&lt;/h1&gt;
+
+&lt;h3 id=&quot;more-fun-with-spreadsheets&quot;&gt;More Fun with Spreadsheets&lt;/h3&gt;
+
+&lt;h5 id=&quot;week-of-september-26-2016&quot;&gt;Week of September 26, 2016&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;During today’s studio, you will be conducting your own data analysis using LibreOffice Calc. Last week, you learned some of the most important tools of Calc. Today we will teach you a few more techniques and help you prepare data, but we are leaving the analysis up to you! You will mine the data, discover interesting patterns, and then post your findings online.&lt;/p&gt;
+
+&lt;p&gt;Upon completion of all tasks, a TA will give you credit for today’s studio. If you do not manage to complete all the assigned work during the studio period, do not worry. You can continue to work on this assignment until midnight on the Tuesday following this studio. Come by TA hours any time before then to show us your completed work and get credit for today’s studio.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;objectives&quot;&gt;Objectives&lt;/h3&gt;
+&lt;p&gt;By the end of this studio, you will better understand how to analyze data in LibreOffice, and you will be able to post your findings online. While we expect you to use many of the techniques you learned previously, some new methods of analysis that you will be learning today include:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Joining data tables&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Data cleaning&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Quartiles&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Scatterplots and trend lines&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;data&quot;&gt;Data&lt;/h3&gt;
+&lt;p&gt;In this studio, we will be using data regarding international development. We will look at various economic, health, education, and demographic metrics for countries worldwide. There are several organizations that study international development, so we were able to collect data from a handful of sources: the United Nations, the CIA, and the World Bank. Each source reports on different development metrics, so the first goal of this studio will be to combine each of these small data sets into one large spreadsheet. After aggregating all of these data, you should be able to conduct a more interesting analysis.&lt;/p&gt;
+
+&lt;p&gt;*Note: Please feel free to research any of the metrics in these data sets to learn more about them.&lt;/p&gt;
+
+&lt;p&gt;We will start with four csv files, each retrieved from a different source. All of the measurements were taken in 2014. Download each data set, and then take a look at them in LibreOffice Calc.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;File #1: &lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/2/2014hdi.csv&quot;&gt;2014hdi.csv&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This table includes countries’ &lt;strong&gt;Human Development Index&lt;/strong&gt;, a composite value measuring life expectancy, education, and per capita income. Countries are also ranked in this data set, and then grouped into 4 tiers of development (very high, high, medium, and low).&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://hdr.undp.org/en/composite/HDI&quot;&gt;Source&lt;/a&gt;: United Nations Development Programme&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;File #2: &lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/2/2014gini.csv&quot;&gt;2014gini.csv&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This table lists each country’s GINI coefficient, which is a measure of the degree of income inequality within a country. The scale of this coefficient is from 0 to 100, with 0 representing perfect equality, and 100 representing perfect inequality.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.cia.gov/library/publications/the-world-factbook/rankorder/2172rank.html&quot;&gt;Source&lt;/a&gt;: 
+The CIA World Factbook&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;File #3: &lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/2/2014worlddev.csv&quot;&gt;2014worlddev.csv&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This table includes various indicators of development. Topics include technology, population growth, employment, and more.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://wdi.worldbank.org/tables&quot;&gt;Source&lt;/a&gt;: The World Bank&lt;/p&gt;
+
+&lt;p&gt;While the World Bank provides publicly available data for hundreds of development metrics, we selected only a small subset. Some of the variables are population, unemployment rate, and internet usage.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;File #4: &lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/2/continents.csv&quot;&gt;continents.csv&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This table lists each country’s continent and subcontinent.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://unstats.un.org/unsd/methods/m49/m49regin.htm#ftnb&quot;&gt;Source&lt;/a&gt;: United Nations Statistics Division&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;merging-the-data&quot;&gt;Merging the Data&lt;/h3&gt;
+
+&lt;p&gt;Now that you have downloaded and opened all of the csv files, you should have four windows of LibreOffice Calc open, one for each spreadsheet. Let’s consolidate all of these spreadsheets into one workbook.&lt;/p&gt;
+
+&lt;p&gt;Begin by saving a new “master” workbook. With the &lt;code class=&quot;highlighter-rouge&quot;&gt;2014hdi.csv&lt;/code&gt; window open, go to &lt;code class=&quot;highlighter-rouge&quot;&gt;File → Save As&lt;/code&gt;. In the field &lt;code class=&quot;highlighter-rouge&quot;&gt;File name&lt;/code&gt;, name the workbook &lt;code class=&quot;highlighter-rouge&quot;&gt;InternationalDevelopment&lt;/code&gt;. Then, in the field &lt;code class=&quot;highlighter-rouge&quot;&gt;File type&lt;/code&gt;, change the setting to &lt;code class=&quot;highlighter-rouge&quot;&gt;ODF Spreadsheet (.ods)&lt;/code&gt;. ODF (OpenDocument Format) Spreadsheet is Calc’s default filetype. Saving in this format will enable you to save any Calc objects (e.g., pivot tables, charts) that you create later on.&lt;/p&gt;
+
+&lt;p&gt;Now let’s import the data from the &lt;code class=&quot;highlighter-rouge&quot;&gt;continents.csv&lt;/code&gt; spreadsheet. Open the &lt;code class=&quot;highlighter-rouge&quot;&gt;continents.csv&lt;/code&gt; workbook and then go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Edit → Sheet → Move/Copy&lt;/code&gt;. Under the &lt;code class=&quot;highlighter-rouge&quot;&gt;To document&lt;/code&gt; field, the default option should be &lt;code class=&quot;highlighter-rouge&quot;&gt;continents (current document)&lt;/code&gt;. Change this to &lt;code class=&quot;highlighter-rouge&quot;&gt;InternationalDevelopment&lt;/code&gt;. Then click &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;. Now when you open the &lt;code class=&quot;highlighter-rouge&quot;&gt;InternationalDevelopment&lt;/code&gt; workbook, you should see two sheets: &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;2014hdi&lt;/code&gt;. You can close the &lt;code class=&quot;highlighter-rouge&quot;&gt;continents.csv&lt;/code&gt; workbook now that you have copied all of its data over. Then save the &lt;code class=&quot;highlighter-rouge&quot;&gt;InternationalDevelopment&lt;/code&gt; workbook.&lt;/p&gt;
+
+&lt;p&gt;N.B. &lt;strong&gt;Save often!&lt;/strong&gt; If Calc crashes or if anything else unintended happens, regularly saving your work will minimize your losses.&lt;/p&gt;
+
+&lt;p&gt;Repeat this process for &lt;code class=&quot;highlighter-rouge&quot;&gt;2014gini.csv&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;2014worlddev.csv&lt;/code&gt; saving as you go. Once you have copied everything over, you will have four sheets of data in the &lt;code class=&quot;highlighter-rouge&quot;&gt;InternationalDevelopment.ods&lt;/code&gt; workbook.&lt;/p&gt;
+
+&lt;h3 id=&quot;join&quot;&gt;Join&lt;/h3&gt;
+
+&lt;p&gt;By now, you should have compiled all the data into four sheets, as part of a single workbook. Next, we are going to merge these sheets into one large “master” sheet that includes all of the metrics for each country. In database jargon, this is process is referred to as &lt;strong&gt;joining&lt;/strong&gt; tables. Here is an example of two tables being joined together based on the value of “Order ID”:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.extendoffice.com/images/stories/doc-excel/vlookup-merge-two-sheets/doc-vlookup-merge-two-sheets-1.png&quot; alt=&quot;Example Image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;sub&gt;&lt;sup&gt;Image Source: www.extendoffice.com&lt;/sup&gt;&lt;/sub&gt;&lt;/p&gt;
+
+&lt;p&gt;In the example above, the two tables contain the exact same Order IDs (10001 through 10009). However, it is possible that some IDs might appear in one table but not the other. In such cases, we would have to decide which IDs we want to retain and which we want to exclude. There are several options for joining tables:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Inner join&lt;/strong&gt;- retain values that appear in both tables&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Left join&lt;/strong&gt;- retain values that appear in only the left (i.e. first) table&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Right join&lt;/strong&gt;- retain values that appear in only the right (i.e. second) table&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Full join&lt;/strong&gt;- retain values that appear in the left and/or right table&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.dofactory.com/Images/sql-joins.png&quot; alt=&quot;Venn Diagram&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;sub&gt;&lt;sup&gt;Image Source: www.dofactory.com&lt;/sup&gt;&lt;/sub&gt;&lt;/p&gt;
+
+&lt;p&gt;For our own data, we want to join the four tables based on the names of the countries. The function that we use to join tables in spreadsheets is called VLOOKUP. (The “V” stands for value.) Today, use will use it specifically to perform &lt;strong&gt;left joins&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h5 id=&quot;vlookup-basics&quot;&gt;VLOOKUP Basics&lt;/h5&gt;
+
+&lt;p&gt;VLOOKUP searches the first column of a block of data for a given value, and when it finds it, it returns the corresponding value in some other column &lt;em&gt;in the same row&lt;/em&gt;. The form of the function is &lt;code class=&quot;highlighter-rouge&quot;&gt;=VLOOKUP(search_value, search_range, column, sorted)&lt;/code&gt;. For example, in &lt;code class=&quot;highlighter-rouge&quot;&gt;2014hdi&lt;/code&gt;, if you wanted to know the GNI per capita (column G) of Japan, you would type &lt;code class=&quot;highlighter-rouge&quot;&gt;=VLOOKUP(&quot;Japan&quot;, $A$1:$H$189, COLUMN(G1), 0)&lt;/code&gt;. “Japan” is the search value; &lt;code class=&quot;highlighter-rouge&quot;&gt;$A$1:$H$189&lt;/code&gt; is the full range of the sheet; G1 is the column (GNI per capita) whose value should be returned; and 0 indicates that the first column (country names) is not sorted. (The value for &lt;code class=&quot;highlighter-rouge&quot;&gt;sorted&lt;/code&gt; can either be 1 or 0. Use 1 to indicate that the first column is sorted in ascending order, and use 0 to indicate that it is not.)&lt;/p&gt;
+
+&lt;h5 id=&quot;using-vlookup-to-merge-sheets&quot;&gt;Using VLOOKUP to Merge Sheets&lt;/h5&gt;
+
+&lt;p&gt;We will now use VLOOKUP to combine the data in our all four sheets into one. Let’s begin by creating our new “master” sheet. We can start by copying over all of the data from the sheet &lt;code class=&quot;highlighter-rouge&quot;&gt;2014hdi&lt;/code&gt;. While &lt;code class=&quot;highlighter-rouge&quot;&gt;2014hdi&lt;/code&gt; is open, go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Edit → Sheet → Move/Copy&lt;/code&gt;. Then select the &lt;code class=&quot;highlighter-rouge&quot;&gt;Copy&lt;/code&gt; button, name the sheet &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt;, and click &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Adding “continents” data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Starting from this first sheet of data, we can add the data from the sheet &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt; using VLOOKUP. As reminder, the form for VLOOKUP is  &lt;code class=&quot;highlighter-rouge&quot;&gt;=VLOOKUP(search_value, search_range, column, sorted)&lt;/code&gt;. Let’s first see how we can add the “region” for Norway, the first country listed in our spreadsheet. In cell &lt;code class=&quot;highlighter-rouge&quot;&gt;I2&lt;/code&gt; of &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt;, type &lt;code class=&quot;highlighter-rouge&quot;&gt;=VLOOKUP($A2, $continents.$A$1:$C$250, COLUMN(B1), 0)&lt;/code&gt;. This formula searches for the value in cell A2 (“Norway”) in the range from A1 to C250 in the sheet &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt;. It then returns the value in the corresponding row that is stored in column B, whose column name is given in cell B1 (“region”). After entering this formula, you should see the value “Europe” appear in I2.&lt;/p&gt;
+
+&lt;p&gt;Now we want to add the “sub-region” for Norway. Drag the bottom right hand corner of cell I2 over to cell J2. The value “Northern Europe” should appear. If you look at the formula bar for J2, it should display &lt;code class=&quot;highlighter-rouge&quot;&gt;=VLOOKUP($A2, $continents.$A$1:$C$250, COLUMN(C1), 0)&lt;/code&gt;, indicating the that return value is now located in column C (“sub-region”). To obtain the region and sub-region for all the countries, copy the contents of cells I2 and J2 down to the bottom of the sheet. Finally, copy the column names in &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt; (cells B1 and C1) to &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt; (cells I1 and J1).&lt;/p&gt;
+
+&lt;h3 id=&quot;data-cleaning&quot;&gt;Data Cleaning&lt;/h3&gt;
+
+&lt;p&gt;We will repeat the aforementioned steps to merge in the other three data sets, but before we do so, let’s do a tiny bit of data cleaning.&lt;/p&gt;
+
+&lt;p&gt;You will notice that some of the results in columns I and J are &lt;code class=&quot;highlighter-rouge&quot;&gt;#N/A&lt;/code&gt;. This indicates that the country name in &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt; could not be found in &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are (at least) two possible reasons for this error:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The same country is entered using two different names in the two sheets (e.g., United States vs. United States of America).&lt;/li&gt;
+  &lt;li&gt;The sheets are of different lengths, because some have data for more countries than others.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We can address the first reason by changing &lt;code class=&quot;highlighter-rouge&quot;&gt;United States&lt;/code&gt; in cell A9 to &lt;code class=&quot;highlighter-rouge&quot;&gt;United States of America&lt;/code&gt;. We can also change &lt;code class=&quot;highlighter-rouge&quot;&gt;Hong Kong, China (SAR)&lt;/code&gt; in cell A13 to &lt;code class=&quot;highlighter-rouge&quot;&gt;Hong Kong&lt;/code&gt;. Now that the country names between &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt; are consistent, values for these two countries should appear.&lt;/p&gt;
+
+&lt;p&gt;Because you have a limited amount of time in this studio, we do not expect you to edit too many more of the country names. When conducting a more comprehensive analysis, however, you would need to take the time to clean all the data thoroughly.&lt;/p&gt;
+
+&lt;p&gt;Now let’s consider reason #2: some sheets have data for more countries than others. You should notice that &lt;code class=&quot;highlighter-rouge&quot;&gt;2014hdi&lt;/code&gt; lists 188 countries, while &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt; lists 249. Using VLOOKUP, we lost information about the countries that appear only in &lt;code class=&quot;highlighter-rouge&quot;&gt;continents&lt;/code&gt;. More specifically, we performed a left join, retaining countries that are present in “2014all” but not in “continents”. If we had wanted to retain all countries, present in “2014all” and/or “continents”, we should have performed a full join. However, computing the full join can be a bit cumbersome in spreadsheets, as it usually involves opening a new sheet and somehow creating a column of all keys (e.g., all countries), before populating the new sheet with VLOOKUP formulas. We will defer computing any full joins for the time being.&lt;/p&gt;
+
+&lt;p&gt;However, leaving &lt;code class=&quot;highlighter-rouge&quot;&gt;#N/A&lt;/code&gt; error values in our table will interfere with formulas we may want to write later on. It is better to have blank cells than &lt;code class=&quot;highlighter-rouge&quot;&gt;#N/A&lt;/code&gt;. To do so, we need to wrap our VLOOKUP formula in an IFERROR function. The format for this function is &lt;code class=&quot;highlighter-rouge&quot;&gt;IFERROR(VLOOKUP_function, alternative_value)&lt;/code&gt;. If the &lt;code class=&quot;highlighter-rouge&quot;&gt;VLOOKUP_function&lt;/code&gt; results in an error, the &lt;code class=&quot;highlighter-rouge&quot;&gt;alternative_value&lt;/code&gt; will be displayed. We want our &lt;code class=&quot;highlighter-rouge&quot;&gt;alternative_value&lt;/code&gt; to be &lt;code class=&quot;highlighter-rouge&quot;&gt;””&lt;/code&gt;, which represents a blank cell.&lt;/p&gt;
+
+&lt;p&gt;Replace the contents of cell I2 with the formula &lt;code class=&quot;highlighter-rouge&quot;&gt;=IFERROR(VLOOKUP($A2, $continents.$A$1:$C$250, COLUMN(B1), 0), “”)&lt;/code&gt;. When you copy this new formula over to column J and down the rest of the rows, all of the &lt;code class=&quot;highlighter-rouge&quot;&gt;#N/A&lt;/code&gt; values should be replaced by blank cells.&lt;/p&gt;
+
+&lt;h3 id=&quot;merging-and-cleaning-the-rest-of-the-data&quot;&gt;Merging and Cleaning the Rest of the Data&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Adding “2014gini” data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s add in the data from &lt;code class=&quot;highlighter-rouge&quot;&gt;2014gini&lt;/code&gt;. In the next open cell of &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt; (cell K2), type &lt;code class=&quot;highlighter-rouge&quot;&gt;=IFERROR(VLOOKUP($A2, $2014gini.$A$1:$B$146, COLUMN(B1), 0), “”)&lt;/code&gt;. Then drag this formula down the length of the spreadsheet. Copy the column name “GINI coefficient.”&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Adding “2014worlddev” data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, add in the last sheet of values. In cell L2 of &lt;code class=&quot;highlighter-rouge&quot;&gt;2014all&lt;/code&gt;, type &lt;code class=&quot;highlighter-rouge&quot;&gt;=IFERROR(VLOOKUP($A2, $2014worlddev.$A$1:$O$218, COLUMN(B1), 0), “”)&lt;/code&gt;. Drag this formula over to column Y and down the length of the spreadsheet. Then copy over all of the column names from &lt;code class=&quot;highlighter-rouge&quot;&gt;2014worlddev&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You should notice that the missing values from &lt;code class=&quot;highlighter-rouge&quot;&gt;2014worlddev&lt;/code&gt; are represented by &lt;code class=&quot;highlighter-rouge&quot;&gt;..&lt;/code&gt;. Just like &lt;code class=&quot;highlighter-rouge&quot;&gt;#N/A&lt;/code&gt;, these missing characters will interfere with later analyses, so you should change all of these values to blank cells. To do so, go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Edit → Find &amp;amp; Replace&lt;/code&gt;. Then, in the field &lt;code class=&quot;highlighter-rouge&quot;&gt;Search for&lt;/code&gt; type &lt;code class=&quot;highlighter-rouge&quot;&gt;..&lt;/code&gt; and leave the field &lt;code class=&quot;highlighter-rouge&quot;&gt;Replace with&lt;/code&gt; empty. In the &lt;code class=&quot;highlighter-rouge&quot;&gt;Other Options&lt;/code&gt; drop down menu, make sure that the field &lt;code class=&quot;highlighter-rouge&quot;&gt;Search in&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;Values&lt;/code&gt;. Then click &lt;code class=&quot;highlighter-rouge&quot;&gt;Replace All&lt;/code&gt;. Check your table to ensure that all of the &lt;code class=&quot;highlighter-rouge&quot;&gt;..&lt;/code&gt; cells are now blank.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;conduct-your-analysis&quot;&gt;Conduct Your Analysis&lt;/h3&gt;
+
+&lt;p&gt;At this point, the data are adequately prepped, so you can begin your analysis! The rest of this studio is completely open-ended. We are leaving it up to you to discover interesting trends and relationships on your own. To get started, you should decide which variables and countries you’d like to analyze. You might want to look at all of the countries, only European countries, only developing countries, a comparison of two specific countries…it’s entirely up to you!&lt;/p&gt;
+
+&lt;p&gt;We are giving you a few guidelines, though, so please read through the next section before beginning your analysis.&lt;/p&gt;
+
+&lt;h5 id=&quot;some-requirements&quot;&gt;Some Requirements&lt;/h5&gt;
+
+&lt;p&gt;We want to ensure that you use most, if not all, of Calc’s tools that we have gone over. To that end, your analysis should include most of the following (and you can always do all!):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Mean vs. median&lt;/strong&gt;- Use the formulas &lt;code class=&quot;highlighter-rouge&quot;&gt;AVERAGE&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;MEDIAN&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Quartiles&lt;/strong&gt;- Use the formula &lt;code class=&quot;highlighter-rouge&quot;&gt;=QUARTILE(data_range; type)&lt;/code&gt;, where type = the type of quartile (0 = MIN, 1 = 25%, 2 = 50% (equivalent to MEDIAN), 3 = 75%, 4 = MAX). For example, if the fertility rate for each country is stored in column Y, and you want to determine the first quartile for the fertility rate of all 189 countries, you would type &lt;code class=&quot;highlighter-rouge&quot;&gt;=QUARTILE(Y1:Y189; 1)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Filters&lt;/strong&gt;- To look at a subset of the data&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Sorting&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Pivot Tables&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;VLOOKUP&lt;/strong&gt;- Find specific values, as in the example about Japan.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Bar Charts&lt;/strong&gt;- When inserting a chart, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;Chart Elements&lt;/code&gt; panel to title your chart and label the axes.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Scatter plots&lt;/strong&gt; - Display the relationship between two quantitative variables. To insert a scatter plot, highlight the two columns that you want to visualize. Go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Insert → Object → Chart&lt;/code&gt; and select &lt;code class=&quot;highlighter-rouge&quot;&gt;XY (Scatter)&lt;/code&gt;. Then navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;Chart Elements&lt;/code&gt;, where you should remove the plot legend and add a title, an X axis label, and a Y axis label.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;markdown&quot;&gt;Markdown&lt;/h5&gt;
+
+&lt;p&gt;Next and last, please describe your findings in a Markdown file, which you will convert to HTML, and then post on the course web site. In your file, you should briefly explain the tools you used in LibreOffice, and then write in some detail about the conclusions you were able to draw.&lt;/p&gt;
+
+&lt;p&gt;Create your file using &lt;a href=&quot;https://kramdown.herokuapp.com/&quot;&gt;this website&lt;/a&gt;. Write your Markdown text on the left side, and then the formatted text will appear on the right. You can refer to &lt;a href=&quot;http://mdcheatsheet.com/&quot;&gt;this style guide&lt;/a&gt; if you need a refresher on Markdown syntax.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;How to insert charts into your file&lt;/em&gt;- You will soon realize that you cannot simply copy and paste a LibreOffice chart into a Markdown file, as you might be able to in other document formats. To visualize charts in Markdown, you first need to save the chart as an image. In Calc, right click on your chart and select &lt;code class=&quot;highlighter-rouge&quot;&gt;Export as Image&lt;/code&gt;. Then name the file, and select &lt;code class=&quot;highlighter-rouge&quot;&gt;PNG - Portable Network Graphic&lt;/code&gt; as the file type. The default folder location should be &lt;code class=&quot;highlighter-rouge&quot;&gt;/home/&amp;lt;your CS login&amp;gt;/Documents&lt;/code&gt;. Change this location to &lt;code class=&quot;highlighter-rouge&quot;&gt;/course/cs100/pub/&amp;lt;your CS login&amp;gt;/studio-2&lt;/code&gt; (make sure you hit &lt;code class=&quot;highlighter-rouge&quot;&gt;Enter&lt;/code&gt; after you type this in), and then click &lt;code class=&quot;highlighter-rouge&quot;&gt;Save&lt;/code&gt;. Finally, in your Markdown file, insert your image using the syntax &lt;code class=&quot;highlighter-rouge&quot;&gt;![chart name](filename.png)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Once you have finished creating your Markdown file, click “Save Markdown”, which will save your file (named “index.md” by default) in your Downloads folder. Then call over a TA to help you convert your Markdown file to HTML. Once posted, the TA will check you off for the studio.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 28 Sep 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/studios/studio-2/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/studios/studio-2/</guid>
+        
+        
+        <category>studios</category>
+        
+      </item>
+    
+      <item>
+        <title>Homework 1</title>
+        <description>&lt;h1 id=&quot;cs100-homework-1&quot;&gt;CS100 Homework #1&lt;/h1&gt;
+
+&lt;h3 id=&quot;the-name-game&quot;&gt;The Name Game&lt;/h3&gt;
+
+&lt;h5 id=&quot;due-october-4-2016-at-10-pm&quot;&gt;Due: October 4, 2016, at 10 pm&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;Please submit your completed spreadsheet to Canvas as an ODS file, and your written responses as a PDF.&lt;/p&gt;
+
+&lt;p&gt;Be sure to follow the CS100 course collaboration policy as you work on this and all CS100 assignments.&lt;/p&gt;
+
+&lt;h3 id=&quot;interactive-grading&quot;&gt;Interactive grading:&lt;/h3&gt;
+&lt;p&gt;In this assignment, we will be conducting interactive grading. Each student will meet individually with a TA to show them the steps taken in LibreOffice to complete this assignment. That way, we can be sure that you have understood the power of spreadsheets, and their nifty tricks.&lt;/p&gt;
+
+&lt;h3 id=&quot;overview&quot;&gt;Overview:&lt;/h3&gt;
+&lt;p&gt;In this assignment, we’ll be exploring associations between historical events and baby names. The &lt;a href=&quot;//cs.brown.edu/courses/cs100/homework/data/1/babyNames.ods&quot;&gt;data set&lt;/a&gt; provided include the annual counts of a few baby names since about 1900, and all names during a few select years (1994-1998). These data were selected from this more &lt;a href=&quot;//cs.brown.edu/courses/cs100/homework/data/1/nationalNames.csv&quot;&gt;complete data set&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Spend some time perusing &lt;a href=&quot;//cs.brown.edu/courses/cs100/homework/data/1/babyNames.ods&quot;&gt;babyNames.ods&lt;/a&gt;,
+and then answer the following questions. At any point along the way, feel free to read up on today’s most fashionable baby names.&lt;/p&gt;
+
+&lt;h3 id=&quot;problems&quot;&gt;Problems:&lt;/h3&gt;
+
+&lt;h3 id=&quot;names-of-famous-politicians&quot;&gt;Names of Famous Politicians&lt;/h3&gt;
+
+&lt;h3 id=&quot;when-americans-named-their-children-dwight&quot;&gt;1.  When Americans named their children Dwight…&lt;/h3&gt;
+&lt;p&gt;1.1. Create a Color Scale in the column “Female Count”, and identify in which year(s) Dwight was most common as a female name. How many female babies were named Dwight in those year(s)?&lt;/p&gt;
+
+&lt;p&gt;1.2. How many male babies were named Dwight in the 1900s, and how many female babies?&lt;/p&gt;
+
+&lt;p&gt;1.3. Create a chart that depicts the year vs. the total counts for both males and females with the name Dwight. Be sure to use informative names for your axes, your legend, and your title.&lt;/p&gt;
+
+&lt;p&gt;1.4. In what year(s) did the name Dwight peak, and what might account for the peak(s)?&lt;/p&gt;
+
+&lt;h3 id=&quot;when-the-name-hillary-was-popular&quot;&gt;2. When the name Hillary was popular…&lt;/h3&gt;
+&lt;p&gt;2.1. Take a cursory look at the “Hillary” sheet. What do you notice? Why might this be the case?&lt;/p&gt;
+
+&lt;p&gt;2.2. Create a chart that depicts the year vs. the count of females named Hillary. When was there a sharp spike in the counts? What might account for this?&lt;/p&gt;
+
+&lt;p&gt;2.3. Likewise, create a chart that depicts the year vs. the count of males named Hillary. Where is the spike in this chart?&lt;/p&gt;
+
+&lt;p&gt;2.4. Create a new column in which you compute the total of both males and females named Hillary each year. How many total babies were named Hillary in 1963? 1975? 1992? 2002?&lt;/p&gt;
+
+&lt;h3 id=&quot;and-when-the-name-barack-came-on-the-scene&quot;&gt;3. And when the name Barack came on the scene…&lt;/h3&gt;
+&lt;p&gt;3.1. Sort the “Barack” sheet in descending order based on “Male Count”. In what year were the most American babies named Barack? And in what year were the fewest?&lt;/p&gt;
+
+&lt;p&gt;3.2. Why do you think we only have 7 years worth of data for Barack?&lt;/p&gt;
+
+&lt;h3 id=&quot;british-royalty&quot;&gt;4. British Royalty&lt;/h3&gt;
+&lt;p&gt;4.1 Create a new sheet called “British Royalty”. Label the rows with 8-10 first names common among British royalty (e.g., George, Elizabeth, Victoria, William, etc.) and the columns with the years 1994 through 1998.&lt;/p&gt;
+
+&lt;p&gt;4.2 Populate the entries in this matrix sheet with the number of times babies were named by those names in each of those years.&lt;/p&gt;
+
+&lt;p&gt;4.3 Conpute the total proportion of the US population that was named for British royalty during the years in question.&lt;/p&gt;
+
+&lt;p&gt;4.4 Recompute the proportions under the assumption that all the seemingly mistaken entries (i.e., males named Elizabeth; women named Charles; etc.) have been corrected. How do the new proportions differ from the originals? Hint: Do not correct the data manually. That would be too time consuming! Just alter your formulas to perform the corrected computations for you.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-few-very-popular-names&quot;&gt;5. A Few Very Popular Names&lt;/h3&gt;
+&lt;p&gt;In a children’s book called Lizard Music, a large proportion of the lizards on the island are called Raymond. In other words, the single most popular name applies to, say, 75% of the population. Likewise, if many many parents in the US in a given year were to give their newborns the same names, it is conceivable that the (say) 10 most popular names could account for more than (say) 50% of the population. Choose your favorite year among 1994 through 1998. Among the most popular names that year, how few does it take to cover 10% of the population of babies? What about 25%?&lt;/p&gt;
+
+&lt;h3 id=&quot;exploratory-data-analysis&quot;&gt;6. Exploratory Data Analysis&lt;/h3&gt;
+&lt;p&gt;In the data provided, you will find several additional sheets, which include data on baby names from 1901-1999:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;the most popular (e.g., &amp;gt;1000 babies in one year) female names&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;the most popular (e.g., &amp;gt;1000 babies in one year) male names,&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;the most popular names (e.g., male count + female count &amp;gt; 5000)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;a sheet of the name Aretha&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;a sheet of the name Britney&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;a sheet of the name Frank&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;all babies born in 1994, 1995, 1996, 1997, and 1998&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Do some EDA on one or more of these sheets, using all the spreadsheet tools you’ve learned in lecture and in studio (formulas, sorting, filtering, joining, pivot tables, graphs, etc.). Describe what you discover using a couple of charts, a pivot table or two, and a 1-2 paragraph write up.&lt;/p&gt;
+
+&lt;p&gt;Here are some examples of the kinds of things you can explore:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Investigate a certain name to discover the year when it peaks and the years when it valleys. Like we did with Hillary, Dwight, and Barack, include some historical context for the popularity of the name.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Look at a few names that are used for both males and females. Likewise, look at names whose nicknames are used for both males and females (e.g., Alexander and Alexandra). Do names like these follow similar patterns?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Focus on years not names. Compare the total number of names each year (i.e., babies reported in this data set) to the population of the United States that same year (which can be found in the last sheet titled USPopulation). Do you notice any trends? Can they be explained by historical events?&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 25 Sep 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/homework/homework-1/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/homework/homework-1/</guid>
+        
+        
+        <category>homework</category>
+        
+      </item>
+    
+      <item>
+        <title>Studio 1: Introduction to Spreadsheets</title>
+        <description>&lt;h1 id=&quot;cs100-studio-1&quot;&gt;CS100 Studio #1&lt;/h1&gt;
+
+&lt;h3 id=&quot;introduction-to-spreadsheets&quot;&gt;Introduction to Spreadsheets&lt;/h3&gt;
+
+&lt;h5 id=&quot;week-of-september-19-2016&quot;&gt;Week of September 19, 2016&lt;/h5&gt;
+
+&lt;h3 id=&quot;instructions&quot;&gt;Instructions:&lt;/h3&gt;
+&lt;p&gt;During today’s studio, you will begin getting acquainted with data and data wrangling. You will be working in Calc, which is the spreadsheet program within LibreOffice. As you complete this studio, write your answers on a sheet of paper, or type them into a text file. If you have any questions along the way, raise your hand, and a TA will come over and help you.&lt;/p&gt;
+
+&lt;p&gt;Upon completion of all of today’s tasks, a TA will give you credit for today’s studio. If you do not manage to complete all the assigned work during the studio period, do not worry. You can continue to work on this assignment until midnight on the Tuesday following this studio. Come by TA hours any time before then to show us your completed work and get credit for today’s studio.&lt;/p&gt;
+
+&lt;h3 id=&quot;objectives&quot;&gt;Objectives:&lt;/h3&gt;
+&lt;p&gt;By the end of this studio, you will know how to process data in spreadsheets using LibreOffice Calc. This includes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Loading csv files&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Writing formulas&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Sorting and filtering data&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Creating pivot tables&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Charting data&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;introduction-to-libreoffice&quot;&gt;Introduction to LibreOffice&lt;/h3&gt;
+&lt;p&gt;LibreOffice is a free, open-source alternative to Microsoft Office. You can find LibreOffice (but not Microsoft Office) on all of the Brown CS department machines, and you can easily install LibreOffice onto a personal computer.&lt;/p&gt;
+
+&lt;p&gt;LibreOffice includes a variety of tools (for creating documents, presentations, etc.). Today we will be using LibreOffice Calc, a program for working with spreadsheets. The skills you learn using LibreOffice Calc are easily transferable to Google Sheets or Microsoft Excel.&lt;/p&gt;
+
+&lt;p&gt;During this week’s and next week’s studios, we will be learning some of the most useful tools of LibreOffice Calc. If at any point you would like to learn more, an in-depth guide can be found &lt;a href=&quot;https://wiki.documentfoundation.org/images/4/47/CG41-CalcGuideLO.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;*Note: Today’s studio refers to the LibreOffice version found on the CS department’s computers. For those of you who are using LibreOffice on your personal laptop, the toolbars and functionality may be a bit different. If you need any assistance navigating LibreOffice on your personal laptop, feel free to ask a TA for help.&lt;/p&gt;
+
+&lt;h3 id=&quot;data&quot;&gt;Data&lt;/h3&gt;
+&lt;p&gt;Today, we’ll be analyzing a variety of breakfast cereals. Click on this &lt;a href=&quot;//cs.brown.edu/courses/cs100/studios/data/1/cerealData.csv&quot;&gt;link&lt;/a&gt; to download cerealData.csv, a table of 77 brands of popular cereals in the US, along with nutritional, and other information about them. Open LibreOffice Calc on your computer, and then open the cerealData.csv file. Spend a few minutes perusing the spreadsheet. Scroll around to get a grasp for the types of measurements in the table.&lt;/p&gt;
+
+&lt;p&gt;Notice that there are some cells with the value “?1”. This indicates a missing data value.&lt;/p&gt;
+
+&lt;p&gt;During today’s studio, we’ll be investigating the sugar content of different cereals. This exploration was inspired by the article &lt;a href=&quot;http://www.seriouseats.com/2015/03/history-of-breakfast-cereal-mascots.html&quot;&gt;‘How Cereal Became the Quintessential American Breakfast’&lt;/a&gt;, which discusses the marketing of cereals as a nutritious breakfast. Many breakfast cereals are considered “healthy” due to their added vitamins and low fat content, but their sugar content may tell a different story.&lt;/p&gt;
+
+&lt;p&gt;Now that you’ve become somewhat acquainted with the data, let’s get to know LibreOffice as well.&lt;/p&gt;
+
+&lt;h3 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h3&gt;
+&lt;p&gt;To highlight a cell you can simply click on it. To highlight consecutive cells, you can click on a cell and drag (left, right, up, down) atop the neighboring cells.&lt;/p&gt;
+
+&lt;p&gt;To highlight an entire column, you can click on the column’s letter at the top header. To highlight an entire row, you can click on a row’s number. Try playing around with this. You can also quickly select portions of rows or columns by clicking on a cell and pressing &lt;code class=&quot;highlighter-rouge&quot;&gt;Shift+Ctrl+↓&lt;/code&gt; (or ↑, ← or →). Try highlighting the whole protein column. To undo any highlighting just click on any cell.&lt;/p&gt;
+
+&lt;p&gt;As you can probably already tell, when you scroll down, the top row disappears and it becomes hard to remember what variable each column refers to. To make your life easier, it will be helpful to keep the header row frozen at the top of the screen. To do this, highlight any cell in the second row, and choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Window → Freeze&lt;/code&gt;. (To deactivate, choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Window → Freeze&lt;/code&gt; again.) This will freeze everything above the second row. To make your life even easier, let’s make the first column stationary as well.  First, unfreeze the top row. Then click on cell B2 and choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Window → Freeze&lt;/code&gt;. The row above B2 and the column to the left of B2 should both be frozen.&lt;/p&gt;
+
+&lt;h3 id=&quot;color-scales&quot;&gt;Color Scales&lt;/h3&gt;
+&lt;p&gt;Color scales are a nifty way for us to easily visualize a range of values, and to identify extreme points (maximum and minimum values).&lt;/p&gt;
+
+&lt;p&gt;Let’s say we wanted to visualize which cereals are highest and lowest in sugar content (per ounce). We can do so using the conditional formatting tools. Highlight the “grams of sugar” column. Then on the main options bar, go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Format → Conditional Formatting → Color Scale&lt;/code&gt;. Under &lt;code class=&quot;highlighter-rouge&quot;&gt;Condition 1&lt;/code&gt; choose &lt;code class=&quot;highlighter-rouge&quot;&gt;All Cells&lt;/code&gt; and then in the next drop down menu choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Color Scale (2 entries)&lt;/code&gt;. In the drop down menu under &lt;code class=&quot;highlighter-rouge&quot;&gt;All Cells&lt;/code&gt; choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Min&lt;/code&gt;, and in the drop down menu at the top of the rightmost column choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Max&lt;/code&gt;. In the drop-down menu under &lt;code class=&quot;highlighter-rouge&quot;&gt;Min&lt;/code&gt; choose “White” (click on the down arrow if “White” is not a visible choice), and in the one under &lt;code class=&quot;highlighter-rouge&quot;&gt;Max&lt;/code&gt; choose any color you please. Click OK, and then unhighlight the “grams of sugar” column to see the effect. The cells in this column should now be color coded.&lt;/p&gt;
+
+&lt;p&gt;A. What two cereals are highest in sugar content?&lt;/p&gt;
+
+&lt;p&gt;B. Name one cereal that has no sugar.&lt;/p&gt;
+
+&lt;p&gt;C. Could you have detected this information without the aid of color scaling? How did the color scales assist you in answering these queries?&lt;/p&gt;
+
+&lt;p&gt;Next, we’d like to compare the sugar content of cereals to that of an Oreo cookie. Sounds like a set of potentially interesting queries: e.g., “Which has more sugar: Fruit loops or Oreos?” But how can we do this comparison? Should we compare the grams of sugar in one fruit loop to the grams of sugar in one cookie? That doesn’t seem quite fair. In fact, our comparison of “grams of sugar” measurements across cereals were likewise unfair!&lt;/p&gt;
+
+&lt;h3 id=&quot;using-formulas&quot;&gt;Using Formulas&lt;/h3&gt;
+&lt;p&gt;Most of the time, a data set in its raw form does not provide all the information of interest. Do not despair. This can be rectified easily in spreadsheets through the use of formulas.&lt;/p&gt;
+
+&lt;p&gt;In the last exercise, you did a cursory comparison of “grams of sugar” across cereals. But this was not actually an apples-to-apples comparison. Why not?  Well, because serving sizes differ! So what we should really be comparing is grams-of-sugar per some unit size. Since serving sizes are measured in ounces, it makes sense to compare sugar content using grams-of-sugar per ounce. Let’s go ahead and compute grams-of-sugar per ounce:&lt;/p&gt;
+
+&lt;p&gt;In column Q, create a new column with the title “grams of sugar per ounce.” For starters, we will calculate the grams per ounce for the cereal of row 2. You can see the cereal’s name in cell A2 (100%_Bran). We want to divide the grams of sugar per serving (J2) by the weight in ounces (N2). Thus, in Q2 you should write &lt;code class=&quot;highlighter-rouge&quot;&gt;=J2/N2&lt;/code&gt; (Note: the equal sign is the symbol that denotes the beginning of a formula.) When you press enter, Calc will display the numerical value. However, when you highlight cell Q2, you can see &lt;code class=&quot;highlighter-rouge&quot;&gt;=J2/N2&lt;/code&gt; written in the formula bar up above.&lt;/p&gt;
+
+&lt;p&gt;Now, click on your cell where the solution lies and drag down the lower right hand corner until you have highlighted the whole column. What happened? You should have just seen the equation in the first cell be changed to reflect the cereal’s row each step of the way. The values should all be different and cereal specific. Click on Q9 to see what the formula is there.&lt;/p&gt;
+
+&lt;p&gt;You will see that Quaker_Oatmeal has &lt;code class=&quot;highlighter-rouge&quot;&gt;#VALUE!&lt;/code&gt; written in its cell. This indicates that there was some kind of error with the formula. This is due to its missing value for grams of sugar (represented by “?1”).&lt;/p&gt;
+
+&lt;p&gt;Later in the course, we will talk more about missing data and data cleaning. For now, we want to ignore these missing values, since they will interfere with our later analyses. Delete &lt;code class=&quot;highlighter-rouge&quot;&gt;#VALUE!&lt;/code&gt; for Quaker_Oatmeal, making Q59 an empty cell.&lt;/p&gt;
+
+&lt;p&gt;Color scale column Q (“grams of sugar per ounce”) like you did column J (“grams of sugar”) above.&lt;/p&gt;
+
+&lt;p&gt;Now let’s compare the sugar content of our cereals to that of Oreo cookies. Oreos have approximately 11.7 grams of sugar per ounce. (One ounce of Oreos is equivalent to approximately 2.5 cookies.) We want to calculate the number of cereals whose sugar content is above this benchmark of 11.7 grams. One easy method is to use the function &lt;code class=&quot;highlighter-rouge&quot;&gt;COUNTIF&lt;/code&gt;. In cell R78, type &lt;code class=&quot;highlighter-rouge&quot;&gt;=COUNTIF(Q2:Q78, “&amp;gt;11.7”)&lt;/code&gt;. This will return the number of cells in the “grams of sugar per ounce” column that have a value greater than 11.7.&lt;/p&gt;
+
+&lt;p&gt;D. How many cereals have more sugar per ounce than Oreos?&lt;/p&gt;
+
+&lt;h3 id=&quot;sorting&quot;&gt;Sorting&lt;/h3&gt;
+&lt;p&gt;Let’s say we want our cereals to be sorted according to their sugar content (per ounce), from least to most (i.e., in ascending order). Let’s see how to do this.&lt;/p&gt;
+
+&lt;p&gt;First, highlight the entire spreadsheet (from cell A1 to cell Q78). Then go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Data→Sort&lt;/code&gt; and in the next dialog box, on the &lt;code class=&quot;highlighter-rouge&quot;&gt;Sort Criteria&lt;/code&gt; tab, under &lt;code class=&quot;highlighter-rouge&quot;&gt;Sort Key 1&lt;/code&gt;, select “grams of sugar per ounce” (column Q). The button for &lt;code class=&quot;highlighter-rouge&quot;&gt;Ascending order&lt;/code&gt; should be selected, and &lt;code class=&quot;highlighter-rouge&quot;&gt;Sort Key 2&lt;/code&gt; should be “-undefined-”. Then go to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Options&lt;/code&gt; tab, and make sure the box next to &lt;code class=&quot;highlighter-rouge&quot;&gt;Range contains column labels&lt;/code&gt; is checked. Checking this box tells LibreOffice not to sort the values in the header row, which lists all the variable names. Press &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;E. How did your spreadsheet change?&lt;/p&gt;
+
+&lt;h3 id=&quot;making-charts&quot;&gt;Making Charts&lt;/h3&gt;
+&lt;p&gt;Another informative (and potentially beautiful) way to visualize data is to make charts.&lt;/p&gt;
+
+&lt;p&gt;We will begin by making a copy of our original spreadsheet. Go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Edit → Sheet → Move/Copy&lt;/code&gt;. In the window that pops up, make sure the &lt;code class=&quot;highlighter-rouge&quot;&gt;Copy&lt;/code&gt; button is filled in and that you are documenting the “current document.” Name the new spreadsheet “cerealData2.” After you click &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;, check the bottom toolbar to ensure that you now have two spreadsheets: “cerealData” and “cerealData2.” Navigate to “cerealData2” (if you are not there already).&lt;/p&gt;
+
+&lt;p&gt;Next, we are going to make some charts. Choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Insert→Object→Chart&lt;/code&gt;. Let’s begin with a simple Column chart. Choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Column&lt;/code&gt;, and then click &lt;code class=&quot;highlighter-rouge&quot;&gt;Next&lt;/code&gt;. The current data range should be &lt;code class=&quot;highlighter-rouge&quot;&gt;$cerealData2.$A$1:$Q$78&lt;/code&gt;. This means that the range is from cell A1 to cell Q78, which is our complete set of data. However, for our chart, we only want to graph the data of two columns: “cereal name” (column A) and “grams of sugar per ounce“ (column Q). To specify these columns, change the data range to be &lt;code class=&quot;highlighter-rouge&quot;&gt;$cerealData2.A1:A78, $cerealData2.Q1:Q78&lt;/code&gt;. Make sure that the buttons and checkboxes for &lt;code class=&quot;highlighter-rouge&quot;&gt;Data series in columns&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;First row as label&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;First column as label&lt;/code&gt; are filled in. Now press &lt;code class=&quot;highlighter-rouge&quot;&gt;Finish&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;F. Looking at the chart, estimate the average number of grams of sugar per ounce?&lt;/p&gt;
+
+&lt;p&gt;G. Is this chart easier or harder to comprehend than a color-scaled column? Discuss the pros and cons of both visualizations with your partner. There is no right answer.&lt;/p&gt;
+
+&lt;p&gt;While the chart allows us visually to estimate the average number grams of sugar per ounce, we can compute the exact value using the formula AVERAGE.&lt;/p&gt;
+
+&lt;p&gt;Navigate back to the original spreadsheet. Let’s create a new row to store average values. Type “Average” in cell A79. For now, we’ll just compute the average for column Q. In cell Q79, type &lt;code class=&quot;highlighter-rouge&quot;&gt;=AVERAGE(Q2:Q78)&lt;/code&gt;. You should now see the numerical value in cell Q79.&lt;/p&gt;
+
+&lt;p&gt;H. What the average number of grams of sugar per ounce? How good was your estimate?&lt;/p&gt;
+
+&lt;h3 id=&quot;filtering&quot;&gt;Filtering&lt;/h3&gt;
+&lt;p&gt;There is a &lt;a href=&quot;http://theplate.nationalgeographic.com/2015/06/15/surviving-the-sneaky-psychology-of-supermarkets/&quot;&gt;psychology behind the layouts of supermarkets&lt;/a&gt; that is intended to manipulate consumer purchases. Decision variables include whether departments are located in the back or front of stores, where items are stacked on the shelves, and more. In our cerealData spreadsheet, you should notice that there is a column titled “display shelf.” There are 3 grocery shelf locations: 1, 2, and 3, which correspond to bottom, middle, and top shelves, respectively. We are going to conduct an analysis to see if we can detect any associations between cereals and their shelves.&lt;/p&gt;
+
+&lt;p&gt;Let’s begin by talking about filtering, a tool that allows you to display only those observations that meet certain criteria. We will use filtering to look at one display shelf at a time.&lt;/p&gt;
+
+&lt;p&gt;Highlight all of column M (“display shelf”) and then go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Data → Filter → AutoFilter&lt;/code&gt;. In cell M1 (which contains the column header “display shelf”) you should now see a box with a downward pointing arrow. When you click on the box, a dropdown menu should appear. Find the area with three checkboxes labeled &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;3&lt;/code&gt;. These are the three different values for our display shelves. Uncheck the boxes &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;3&lt;/code&gt; and then click &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now only the cereals on display shelf 1 should be visible. Play around with the filter to see if you can get only cereals on shelf 2 to appear. Then only the cereals on shelf 3.&lt;/p&gt;
+
+&lt;h3 id=&quot;pivot-tables&quot;&gt;Pivot Tables&lt;/h3&gt;
+&lt;p&gt;Next, we are going to summarize the sugar content of cereals grouped by shelf. We can do this using Pivot Tables.&lt;/p&gt;
+
+&lt;p&gt;Remove any filters so that all 77 cereals are now visible. You can do this by checking the boxes &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;3&lt;/code&gt; in the AutoFilter box.&lt;/p&gt;
+
+&lt;p&gt;Next, highlight the entire spreadsheet. Go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Data → Pivot Table → Create&lt;/code&gt;. Make sure that the &lt;code class=&quot;highlighter-rouge&quot;&gt;Current Selection&lt;/code&gt; button is filled in, and then click &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the Pivot Table Layout box that pops up, drag “display shelf” to &lt;code class=&quot;highlighter-rouge&quot;&gt;Row Fields&lt;/code&gt; and then “grams of sugar per ounce” to &lt;code class=&quot;highlighter-rouge&quot;&gt;Data Fields&lt;/code&gt;. The default settings will display “Sum - grams of sugar per ounce.” However, we want to find the average number of grams. Double click on the word “Sum” and then select “Average.” Your settings should now display “Mean - grams of sugar per ounce.” Click on the &lt;code class=&quot;highlighter-rouge&quot;&gt;Options&lt;/code&gt; drop down menu and check the box for &lt;code class=&quot;highlighter-rouge&quot;&gt;Ignore empty rows&lt;/code&gt;. (You should remember that we had an empty cell for Quaker_Oatmeal.) Then press &lt;code class=&quot;highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You will be redirected to a new spreadsheet displaying your Pivot Table. You should see the average sugar content per shelf, as well as the overall average (which should match the average you calculated previously!). You will also see a column labelled “empty,” which appears because of the “Average” entry in row 79 does not appear on any shelf.&lt;/p&gt;
+
+&lt;p&gt;I. What is the average grams of sugar per ounce for cereals on shelves 1, 2, and 3?&lt;/p&gt;
+
+&lt;p&gt;If you make any changes to the data in your original spreadsheet, you can refresh your Pivot Table to reflect the new information. Let’s go through an example of how to do this. Return to your cerealData spreadsheet, and in cell Q78 (grams of sugar per ounce for Quaker_Oatmeal, which is on shelf 1), type 500. Then go to your Pivot Table sheet, highlight your table, and then go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Data → Pivot Table → Refresh&lt;/code&gt;. You should see that the average for display shelf 1 and the overall average should increase dramatically.&lt;/p&gt;
+
+&lt;p&gt;Before moving on, change your cerealData spreadsheet back to its original values. That is, clear Q78 in cerealData, and then refresh your Pivot Table once again.&lt;/p&gt;
+
+&lt;h3 id=&quot;creating-charts-from-a-pivot-table&quot;&gt;Creating Charts from a Pivot Table&lt;/h3&gt;
+&lt;p&gt;Let’s make a column chart to visualize the averages that are in the Pivot Table. Highlight the Pivot Table and then go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Insert→Object→Chart&lt;/code&gt;. Select a Column chart and then change your &lt;code class=&quot;highlighter-rouge&quot;&gt;Data Range&lt;/code&gt; to include cells from A1 to B4 (we don’t want to visualize the overall averages, so you should exclude row 5 and 6). Ensure that the buttons and checkboxes for &lt;code class=&quot;highlighter-rouge&quot;&gt;Data series in columns&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;First row as label&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;First column as label&lt;/code&gt; are filled in. Then press &lt;code class=&quot;highlighter-rouge&quot;&gt;Finish&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If it was not already clear from your Pivot Table, it should now be eminently clear that the cereals on shelf 2 (the middle shelf) have the highest average sugar content. Moreover, items on the middle shelves are the easiest to see and reach.&lt;/p&gt;
+
+&lt;p&gt;Navigate back to the cerealData sheet and use the “display shelf” filter to look at the cereals on shelves 1 and 3. You’ll notice that many of these cereals include “bran” and “wheat.” Contrast them with the cereals on shelf 2, where you’ll see several cereals that are marketed to children, like Cinnamon Toast Crunch, Fruity Pebbles, and Cocoa Puffs.&lt;/p&gt;
+
+&lt;p&gt;This is a rather unfortunate finding: supermarkets encourage shoppers to buy these high-sugar cereals by displaying them on the middle shelf. The healthier options on the top and bottom shelves can easily be overlooked, especially by children.&lt;/p&gt;
+
+&lt;p&gt;Before proceeding to the final portion of today’s studio raise your hand so that a TA can come by and review your work so far. Once a TA has approved, you may continue on to the final task:&lt;/p&gt;
+
+&lt;h3 id=&quot;your-own-exploration&quot;&gt;Your Own Exploration&lt;/h3&gt;
+&lt;p&gt;Your last task is to create another chart visualizing other the measurements (you need not limit your exploration to just sugar). Be creative and see if you can find any interesting associations in the data set. Feel free to call over a TA if you need help or want to brainstorm about ideas.&lt;/p&gt;
+
+&lt;p&gt;J. What did you chart and why?&lt;/p&gt;
+
+&lt;p&gt;When you are done please raise your hand. A TA will review your final visualization and then check you off for the studio. If you do not finish within the 2-hour studio period, remember to come to TA office hours to get checked off.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 21 Sep 2016 00:00:00 -0400</pubDate>
+        <link>//cs.brown.edu/courses/cs100/studios/studio-1/</link>
+        <guid isPermaLink="true">//cs.brown.edu/courses/cs100/studios/studio-1/</guid>
+        
+        
+        <category>studios</category>
+        
+      </item>
+    
+  </channel>
+</rss>

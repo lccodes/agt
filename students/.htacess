@@ -1,0 +1,13 @@
+ErrorDocument 403 /courses/csci100/students/off_campus_deny.html
+<RequireAll>
+    Require ip 128.148 138.16 10 68.227.185.245
+    Require host .brown.edu .cs.brown.edu
+</RequireAll>
+
+order deny,allow
+deny from all
+allow from .brown.edu
+allow from .cs.brown.edu
+allow from 128.148
+allow from 138.16
+allow from 10

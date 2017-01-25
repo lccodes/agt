@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/course/cs100/pub/bootstrap/bootstrap.min.css" type="text/css" />
+</head>
+<body>
+<h1 id="cs100-studio-2">CS100 Studio 2</h1>
+<p>For Studio 2, I am going to analyze life expectancy at birth and expected years of schooling of all countries provided in the data set.</p>
+<h3 id="mean-vs.median">Mean vs. Median</h3>
+<p>Using the formulas <code>AVERAGE</code> and <code>MEDIAN</code>, I found the average and median life expectancy and years of schooling across all of the countries. The average life expectancy is 71.1 years and the median life expectancy is 73.2 years. The average years of schooling is 13.1 years and the median years of schooling is 12.89 years.</p>
+<h3 id="quartiles">Quartiles</h3>
+<p>I used the <code>QUARTILE</code> function to calculate the quartiles of life expectancy. The 0th quartile (or minimum) is 49 years, 1st quartile is 65.475 years, 2nd quartile is 73.2 years, 3rd quartile is 76.8 years, and 4th quartile (or maximum) is 84 years.</p>
+<h3 id="filter">Filter</h3>
+<p>I filtered the data by sub-region to see life expectancy at a sub-regional level.</p>
+<h3 id="sorting">Sorting</h3>
+<p>I sorted the data by life expectancy.</p>
+<h3 id="pivot-table">Pivot Table</h3>
+<p>I created a pivot table of average life expectancy and average expected years of schooling by region.</p>
+<h3 id="vlookup">VLOOKUP</h3>
+<p>I was curious to know the life expectancy at birth of the United States. I used the <code>VLOOKUP</code> function to find the life expectancy at birth of the USA, which was 79.1 years.</p>
+<h3 id="bar-chart">Bar Chart</h3>
+<p>I created a bar chart to see the frequency of life expectancy in ranges of 5 years.</p>
+<div class="figure">
+<img src="barchart.png" alt="Life Expectancy" /><p class="caption">Life Expectancy</p>
+</div>
+<p>I was curious in comparing the average life expectancy across different regions. I then chose to categorize the data by sub-region. There were 22 sub-regions, which creates a very crowded bar chart.</p>
+<div class="figure">
+<img src="barchart3.png" alt="Average Life Expectancy at Birth" /><p class="caption">Average Life Expectancy at Birth</p>
+</div>
+<p>Instead, I decided to compare average life expectancy across regions. There are only 5 regions, so the bar chart is easier to comprehend.</p>
+<div class="figure">
+<img src="barchart4.png" alt="Average Life Expectancy at Birth" /><p class="caption">Average Life Expectancy at Birth</p>
+</div>
+<p>I was curious if the average expected years of schooling across regions was similar to the bar chart of average life expectancy. Here are the results.</p>
+<div class="figure">
+<img src="barchart5.png" alt="Average Expected Years of Schooling" /><p class="caption">Average Expected Years of Schooling</p>
+</div>
+<h3 id="scatter-plot">Scatter Plot</h3>
+<p>I created a scatter plot to observe the trend between life expectancy at birth and the expected years of schooling across all countries. In the scatter plot, it appears that a trend does in fact exist.</p>
+<div class="figure">
+<img src="scatterplot.png" alt="Life Expectancy at Birth vs. Expected Years of Schooling" /><p class="caption">Life Expectancy at Birth vs. Expected Years of Schooling</p>
+</div>
+</body>
+</html>
